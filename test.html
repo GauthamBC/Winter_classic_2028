@@ -4,6 +4,11 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Winter Classic 2028 — Top Host City Preview (Action)</title>
+
+  <!-- Helps images load faster in embeds -->
+  <link rel="preconnect" href="https://commons.wikimedia.org">
+  <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+
   <style>
     html, body { height:100%; }
     body { margin:0; background:#061225; }
@@ -37,16 +42,25 @@
     --gap: 14px;
     --radius: 18px;
 
-    --t-title: clamp(18px, 2.6vw, 28px);
-    --t-city:  clamp(13px, 1.9vw, 16px);
-    --t-score: clamp(28px, 4.2vw, 46px);
+    /* IMPORTANT: fixed widget height to avoid “only 2 metrics visible” in narrow embeds */
+    --widget-h: 980px;
 
-    --t-card-title: clamp(16px, 2.0vw, 22px);
-    --t-card-value: clamp(14px, 1.9vw, 18px);
+    --t-title: clamp(18px, 2.2vw, 28px);
+    --t-city:  clamp(13px, 1.6vw, 16px);
+    --t-score: clamp(28px, 3.4vw, 46px);
+
+    --t-card-title: clamp(16px, 1.8vw, 22px);
+    --t-card-value: clamp(14px, 1.6vw, 18px);
+  }
+
+  /* Auto-compact when the embed container is short */
+  .action-wc.compact{
+    --gap: 12px;
+    --widget-h: 920px;
   }
 
   section.action-wc{
-    height: calc(100vh - 32px);
+    height: var(--widget-h);
     max-width: 1040px;
     margin: 16px auto;
     border-radius: 22px;
@@ -242,65 +256,54 @@
     pointer-events:none;
   }
 
+  /* No internal scroll: we show all 5 metrics by sizing the widget correctly */
   .board-inner{
     position:relative; z-index:1;
     padding: 16px;
     display:grid;
     grid-template-columns: 1.1fr .9fr;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto auto;
     gap: 16px;
     align-content:start;
     height:100%;
-    overflow:auto;
+    overflow:hidden;
   }
 
-  /* =========================
-     HERO (FIXED IMAGE LAYERING)
-     ========================= */
+  /* Hero city image card (REAL <img>, so it always shows) */
   .hero{
     border-radius: 20px;
     border: 1px solid var(--border);
-    min-height: 140px;
-    padding: 16px;
+    height: clamp(170px, 22vw, 240px);
+    padding: 0;
     position:relative;
     overflow:hidden;
-
-    /* creates a clean stacking context */
-    isolation: isolate;
-    background: #0b274d;
+    background: linear-gradient(180deg, var(--b1), var(--b3));
   }
-  .hero::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background-image: var(--hero-img);
-    background-size: cover;
-    background-position: center;
-    filter: saturate(1.05) contrast(1.02);
+  .hero img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    display:block;
     transform: scale(1.02);
-    z-index: 0; /* <-- crucial */
+    filter: saturate(1.05) contrast(1.03);
   }
-  .hero::before{
-    content:"";
-    position:absolute;
-    inset:0;
+  .hero .overlay{
+    position:absolute; inset:0;
     background:
-      linear-gradient(90deg, rgba(11,39,77,.88) 0%, rgba(11,71,140,.45) 45%, rgba(11,86,170,.18) 70%, rgba(11,86,170,.10) 100%),
+      linear-gradient(90deg, rgba(11,39,77,.86) 0%, rgba(11,71,140,.40) 55%, rgba(11,86,170,.12) 78%, rgba(11,86,170,.08) 100%),
       radial-gradient(120% 140% at 80% 10%, rgba(255,255,255,.14) 0%, transparent 60%);
     pointer-events:none;
-    z-index: 1;
   }
   .hero h2{
     margin:0;
     position:absolute;
     left:16px; bottom:14px;
-    font-size: clamp(26px, 3.6vw, 46px);
+    font-size: clamp(28px, 3.4vw, 46px);
     font-weight: 1100;
     letter-spacing:.2px;
     color:#fff;
     text-shadow: 0 10px 30px rgba(0,0,0,.40);
     line-height:1.05;
-    z-index: 2;
   }
 
   .score{
@@ -308,7 +311,7 @@
     background: linear-gradient(180deg, #ffffff, #f6f9ff);
     border: 1px solid var(--border);
     padding: 16px 16px 14px;
-    min-height: 140px;
+    height: clamp(170px, 22vw, 240px);
   }
   .score .kicker{
     font-size: 12px;
@@ -354,13 +357,13 @@
     border-radius: 18px;
     background: rgba(255,255,255,.86);
     border: 1px solid var(--border);
-    padding: 14px 16px;
+    padding: 12px 16px;
     color: #1f2a3b;
-    font-size: clamp(12px, 1.7vw, 14px);
+    font-size: clamp(12px, 1.5vw, 14px);
     font-weight: 780;
   }
 
-  /* Metric cards */
+  /* Metric cards (Image-2 style) */
   .metrics{
     grid-column: 1 / -1;
     display:grid;
@@ -374,7 +377,7 @@
     background: linear-gradient(180deg, #ffffff, #f7fbff);
     border: 1px solid var(--border);
     padding: 18px;
-    min-height: 150px;
+    min-height: 140px;
     display:grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
@@ -393,7 +396,6 @@
     font-size: var(--t-card-title);
     font-weight: 1100;
     color: var(--ink);
-    note: none;
     line-height:1.05;
   }
   .mValue{
@@ -495,7 +497,7 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* Mobile */
+  /* Narrow embeds (Action article column) */
   @media (max-width: 900px){
     .layout{
       grid-template-columns: 1fr;
@@ -510,13 +512,19 @@
     .city-btn{ min-width: 320px; scroll-snap-align: start; }
   }
 
+  /* Small phones: allow taller widget */
   @media (max-width: 560px){
+    .action-wc{ --widget-h: 1180px; }
     .board-inner{
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto;
+      grid-template-rows: auto auto auto auto;
     }
     .metrics{ grid-template-columns: 1fr; }
-    .mcard{ min-height: 150px; padding: 18px; }
+  }
+
+  /* Reduce motion support */
+  @media (prefers-reduced-motion: reduce){
+    .fill, .wFill, .mcard, .city-btn { transition:none !important; }
   }
 </style>
 
@@ -606,7 +614,9 @@
       <main class="board" aria-live="polite">
         <div class="board-inner">
 
-          <div class="hero" id="heroCard" style="--hero-img: url('');">
+          <div class="hero" id="heroCard">
+            <img id="heroImg" alt="" loading="eager" decoding="async">
+            <div class="overlay" aria-hidden="true"></div>
             <h2 id="heroTitle">Chicago</h2>
           </div>
 
@@ -617,9 +627,7 @@
             <div class="scale"><span>0</span><span>100</span></div>
           </section>
 
-          <div class="desc" id="desc">
-            Classic hockey market + elite access. Strong stadium options and a deep fan base make Chicago the front-runner.
-          </div>
+          <div class="desc" id="desc"></div>
 
           <div class="metrics" id="metrics"></div>
 
@@ -635,23 +643,23 @@
   </footer>
 
 <script>
-  // Top-3 data
+  // Top-3 data (Wikimedia Commons)
   const CITIES = {
     "Chicago": {
       score: 66.02,
-      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Chicago%20Skyline%20Oct%202022%202.jpg",
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Chicago_Skyline_At_Sunset_United_States_Cityscape_Photography_(112263307).jpeg",
       desc: "Classic hockey market + elite access. Strong stadium options and a deep fan base make Chicago the front-runner.",
       values: { access: 26113502, temp: 25.6, capacity: 61500, hotels: 103, fans: 2500000 }
     },
     "Dallas": {
       score: 63.35,
-      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Dallas%20Skyline%20with%20Arts%20District.jpg",
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Dallas_Skyline_at_Dusk.jpg",
       desc: "Stadium scale + airport connectivity keep Dallas near the top — a big-event market with proven outdoor success.",
       values: { access: 30694774, temp: 47.2, capacity: 92100, hotels: 52, fans: 500000 }
     },
     "Los Angeles": {
       score: 59.16,
-      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Bunker%20Hill%20Downtown%20Los%20Angeles.jpg",
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Bunker_Hill_Downtown_Los_Angeles.jpg",
       desc: "TV-first Winter Classic potential: iconic venues, massive reach, and high travel demand.",
       values: { access: 21874207, temp: 57.2, capacity: 89702, hotels: 54, fans: 882000 }
     }
@@ -659,21 +667,22 @@
 
   // Weights from methodology
   const METRICS = [
-    { key:"access",   title:"Airport & Travel",   weight:30, value:(c)=> c.values.access,   fmt:(n)=> n.toLocaleString(), unit:"pax",   icon: planeIcon() },
-    { key:"temp",     title:"January Climate",    weight:15, value:(c)=> c.values.temp,     fmt:(n)=> `${n.toFixed(1)}°F`,             unit:"",      icon: tempIcon() },
-    { key:"capacity", title:"Stadium Capacity",   weight:20, value:(c)=> c.values.capacity, fmt:(n)=> n.toLocaleString(),              unit:"Seats", icon: stadiumIcon() },
-    { key:"hotels",   title:"Hotel Availability", weight:15, value:(c)=> c.values.hotels,   fmt:(n)=> n.toLocaleString(),              unit:"Hotels",icon: hotelIcon() },
-    { key:"fans",     title:"Hockey Fan Base",    weight:20, value:(c)=> c.values.fans,     fmt:(n)=> n.toLocaleString(),              unit:"Fans",  icon: fansIcon() },
+    { key:"access",   title:"Airport & Travel",   weight:30, value:(c)=> c.values.access,   fmt:(n)=> n.toLocaleString(), unit:"pax",    icon: planeIcon() },
+    { key:"temp",     title:"January Climate",    weight:15, value:(c)=> c.values.temp,     fmt:(n)=> `${n.toFixed(1)}°F`, unit:"",      icon: tempIcon() },
+    { key:"capacity", title:"Stadium Capacity",   weight:20, value:(c)=> c.values.capacity, fmt:(n)=> n.toLocaleString(),  unit:"Seats",  icon: stadiumIcon() },
+    { key:"hotels",   title:"Hotel Availability", weight:15, value:(c)=> c.values.hotels,   fmt:(n)=> n.toLocaleString(),  unit:"Hotels", icon: hotelIcon() },
+    { key:"fans",     title:"Hockey Fan Base",    weight:20, value:(c)=> c.values.fans,     fmt:(n)=> n.toLocaleString(),  unit:"Fans",   icon: fansIcon() },
   ];
 
   // DOM
-  const heroTitle   = document.getElementById("heroTitle");
-  const heroCard    = document.getElementById("heroCard");
-  const scoreKicker = document.getElementById("scoreKicker");
-  const scoreBig    = document.getElementById("scoreBig");
-  const desc        = document.getElementById("desc");
-  const scoreFill   = document.getElementById("scoreFill");
-  const metricsEl   = document.getElementById("metrics");
+  const root       = document.querySelector(".action-wc");
+  const heroTitle  = document.getElementById("heroTitle");
+  const heroImg    = document.getElementById("heroImg");
+  const scoreKicker= document.getElementById("scoreKicker");
+  const scoreBig   = document.getElementById("scoreBig");
+  const desc       = document.getElementById("desc");
+  const scoreFill  = document.getElementById("scoreFill");
+  const metricsEl  = document.getElementById("metrics");
 
   function render(cityName){
     const d = CITIES[cityName];
@@ -681,12 +690,19 @@
 
     heroTitle.textContent = cityName;
     scoreKicker.textContent = `${cityName} Winter Classic Score`;
-    desc.textContent      = d.desc;
-    scoreBig.textContent  = d.score.toFixed(2);
+    desc.textContent = d.desc;
+
+    scoreBig.textContent = d.score.toFixed(2);
     scoreFill.style.width = Math.max(0, Math.min(100, d.score)) + "%";
 
-    // City hero image
-    heroCard.style.setProperty("--hero-img", `url("${d.heroImg}")`);
+    // HERO IMAGE (real <img> so it reliably shows in embeds)
+    heroImg.src = d.heroImg;
+    heroImg.alt = `${cityName} skyline`;
+
+    // If an embed blocks/denies the image, keep it looking clean
+    heroImg.onerror = () => {
+      heroImg.removeAttribute("src");
+    };
 
     metricsEl.innerHTML = METRICS.map(m => {
       const raw = m.value(d);
@@ -728,7 +744,7 @@
     });
   });
 
-  // Copy snippet
+  // Copy snippet (match widget height)
   const copyBtn = document.getElementById("copyBtn");
   copyBtn.addEventListener("click", async () => {
     const snippet =
@@ -736,7 +752,7 @@
   title="Winter Classic 2028 — Top Host City Preview"
   src="YOUR_EMBED_URL_HERE"
   width="100%"
-  height="880"
+  height="980"
   scrolling="no"
   style="border:0; overflow:hidden; display:block; width:100%;"
   loading="lazy"></iframe>`;
@@ -749,6 +765,13 @@
       setTimeout(()=> copyBtn.textContent = "Copy embed snippet", 1600);
     }
   });
+
+  // Auto compact mode if container height is tight (prevents “only 2 metrics visible”)
+  const ro = new ResizeObserver(entries => {
+    const rect = entries[0].contentRect;
+    root.classList.toggle("compact", rect.height < 920);
+  });
+  ro.observe(root);
 
   // Init
   render("Chicago");
