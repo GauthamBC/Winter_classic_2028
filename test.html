@@ -295,15 +295,16 @@
     filter: saturate(1.05) contrast(1.03);
   }
 
-  /* Light global overlay (keeps image crisp) */
+  /* ✅ Bring back the blue hero overlay (like before) */
   .hero .overlay{
     position:absolute; inset:0;
     background:
+      linear-gradient(90deg, rgba(11,39,77,.74) 0%, rgba(11,71,140,.36) 55%, rgba(11,86,170,.12) 78%, rgba(11,86,170,.08) 100%),
       radial-gradient(120% 140% at 80% 10%, rgba(255,255,255,.12) 0%, transparent 60%);
     pointer-events:none;
   }
 
-  /* ✅ New top bar area holding City + Score */
+  /* Top row (city left, score right) */
   .hero-top{
     position:absolute;
     left: 14px; right: 14px;
@@ -315,16 +316,16 @@
     z-index: 2;
   }
 
-  /* ✅ Gradient ONLY behind the top UI (not the whole image) */
+  /* ✅ Blue gradient ONLY behind the top UI */
   .hero-top::before{
     content:"";
     position:absolute;
     left:-14px; right:-14px;
     top:-14px;
-    height: 92px;
+    height: 98px;
     background:
-      linear-gradient(180deg, rgba(6,18,37,.78) 0%, rgba(6,18,37,.40) 55%, rgba(6,18,37,0) 100%),
-      radial-gradient(120% 160% at 10% 0%, rgba(77,130,210,.22) 0%, transparent 55%);
+      radial-gradient(120% 160% at 20% 0%, rgba(77,130,210,.22) 0%, transparent 60%),
+      linear-gradient(180deg, rgba(6,18,37,.82) 0%, rgba(6,18,37,.46) 58%, rgba(6,18,37,0) 100%);
     pointer-events:none;
     z-index: -1;
   }
@@ -332,47 +333,69 @@
   /* City pill (top-left) */
   .hero-city{
     display:inline-flex;
-    align-items:center;
+    align-items:flex-start;
     gap: 10px;
     padding: 10px 12px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.22);
-    background: rgba(6,18,37,.30);
+
+    /* subtle blue glass */
+    background:
+      radial-gradient(120% 160% at 10% 0%, rgba(77,130,210,.22) 0%, transparent 58%),
+      linear-gradient(180deg, rgba(6,18,37,.45), rgba(6,18,37,.26));
+
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
     box-shadow: 0 16px 34px rgba(0,0,0,.18);
-    max-width: calc(100% - 240px); /* leaves room for score box on right */
+
+    /* allow longer names without ellipsis */
+    max-width: calc(100% - 248px);
+    overflow:hidden; /* keeps it clean if someone adds super long text */
   }
+
+  /* ✅ reduce text size slightly + allow wrapping so we don’t ellipsize */
   .hero-city .city-txt{
-    font-size: clamp(18px, 2.5vw, 26px);
+    font-size: clamp(16px, 2.2vw, 23px);
     font-weight: 1100;
     letter-spacing: .2px;
     color:#fff;
-    line-height:1.05;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    line-height:1.12;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    word-break: break-word;
     text-shadow: 0 10px 26px rgba(0,0,0,.35);
   }
 
   /* Score panel (top-right) */
   .hero-score{
     flex: 0 0 auto;
-    width: 226px;
-    max-width: 42%;
+
+    width: 236px;
+    max-width: 46%;
     padding: 10px 12px 10px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.20);
-    background: linear-gradient(180deg, rgba(6,18,37,.40), rgba(6,18,37,.26));
+
+    /* ✅ bring back the “Action blue” gradient feel */
+    background:
+      radial-gradient(120% 160% at 18% 0%, rgba(77,130,210,.32) 0%, transparent 58%),
+      linear-gradient(135deg, rgba(11,39,77,.78) 0%, rgba(11,71,140,.52) 52%, rgba(8,94,186,.36) 100%);
+
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
     box-shadow: 0 16px 34px rgba(0,0,0,.18);
+
+    /* ✅ prevents any internal “bleed” */
+    overflow:hidden;
+    contain: content;
   }
 
   .hero-score-top{
     display:flex;
     align-items:center;
     gap: 8px;
+    min-width: 0;
   }
   .hero-score-ico{
     width: 22px; height: 22px;
@@ -399,16 +422,22 @@
     font-weight: 1000;
     letter-spacing: .2px;
     line-height: 1.1;
-    white-space:nowrap;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
   .hero-score .big{
     margin-top: 6px;
     color:#fff;
-    font-size: clamp(22px, 2.8vw, 34px);
+    font-size: clamp(21px, 2.6vw, 32px);
     font-weight: 1150;
     line-height: 1;
     font-variant-numeric: tabular-nums;
     text-shadow: 0 10px 22px rgba(0,0,0,.28);
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: clip;
   }
   .hero-meter{
     height: 10px;
@@ -690,7 +719,6 @@
     .board{ height: auto; }
   }
 
-  /* ✅ On small phones: let score shrink a bit + keep city readable */
   @media (max-width: 560px){
     .board-inner{
       grid-template-columns: 1fr;
@@ -701,12 +729,11 @@
     .metrics{ grid-template-columns: 1fr; }
 
     .hero-top{ left: 12px; right: 12px; top: 12px; }
-    .hero-score{ width: 210px; max-width: 46%; }
-    .hero-city{ max-width: calc(100% - 210px); }
-    .hero-top::before{
-      left:-12px; right:-12px; top:-12px;
-      height: 96px;
-    }
+    .hero-top::before{ left:-12px; right:-12px; top:-12px; height: 104px; }
+
+    .hero-score{ width: 220px; max-width: 48%; }
+    .hero-city{ max-width: calc(100% - 230px); }
+    .hero-city .city-txt{ font-size: clamp(15px, 4.3vw, 20px); }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -817,7 +844,6 @@
             <img id="heroImg" alt="" loading="eager" decoding="async">
             <div class="overlay" aria-hidden="true"></div>
 
-            <!-- ✅ City + Score live here now -->
             <div class="hero-top" aria-label="Hero Top">
               <div class="hero-city" aria-label="City name">
                 <div class="city-txt" id="heroTitle">Chicago</div>
