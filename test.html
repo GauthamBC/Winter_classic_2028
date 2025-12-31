@@ -39,11 +39,13 @@
     --shadow: 0 20px 55px rgba(0,0,0,.30);
     --shadow2: 0 12px 30px rgba(0,0,0,.22);
 
-    --gap: 14px;
+    /* unified spacing tokens */
+    --gap: 14px;        /* one gap to rule them all */
+    --inner-pad: 18px;  /* safe padding so cards/hover never clip */
     --radius: 18px;
 
-    /* IMPORTANT: fixed widget height to avoid “only 2 metrics visible” in narrow embeds */
-    --widget-h: 980px;
+    /* fixed widget height */
+    --widget-h: 860px;
 
     --t-title: clamp(18px, 2.2vw, 28px);
     --t-city:  clamp(13px, 1.6vw, 16px);
@@ -56,7 +58,8 @@
   /* Auto-compact when the embed container is short */
   .action-wc.compact{
     --gap: 12px;
-    --widget-h: 920px;
+    --inner-pad: 16px;
+    --widget-h: 820px;
   }
 
   section.action-wc{
@@ -118,7 +121,7 @@
   .wrap{
     flex: 1 1 auto;
     min-height:0;
-    padding: 14px;
+    padding: 14px 14px 8px; /* slim space above footer */
     overflow:hidden;
   }
   .layout{
@@ -133,7 +136,7 @@
   .rail{
     display:flex;
     flex-direction:column;
-    gap: 12px;
+    gap: var(--gap); /* ✅ unified */
     height:100%;
     overflow:auto;
     padding-right: 6px;
@@ -256,20 +259,20 @@
     pointer-events:none;
   }
 
-  /* No internal scroll: we show all 5 metrics by sizing the widget correctly */
+  /* ✅ even spacing + equal fill without bleeding */
   .board-inner{
     position:relative; z-index:1;
-    padding: 16px;
+    padding: var(--inner-pad);
     display:grid;
     grid-template-columns: 1.1fr .9fr;
-    grid-template-rows: auto auto auto;
-    gap: 16px;
-    align-content:start;
+    grid-template-rows: auto auto 1fr; /* metrics take remaining space */
+    gap: var(--gap);
+    align-content:stretch;
     height:100%;
     overflow:hidden;
   }
 
-  /* Hero city image card (REAL <img>, so it always shows) */
+  /* Hero city image card */
   .hero{
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -294,6 +297,61 @@
       radial-gradient(120% 140% at 80% 10%, rgba(255,255,255,.14) 0%, transparent 60%);
     pointer-events:none;
   }
+
+  /* Score overlay inside hero */
+  .hero-score{
+    position:absolute;
+    left: 14px;
+    top: 14px;
+    max-width: calc(100% - 28px);
+    padding: 10px 12px 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(6,18,37,.38);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 16px 34px rgba(0,0,0,.22);
+  }
+  .hero-score .kicker{
+    color: rgba(255,255,255,.92);
+    font-size: 12px;
+    font-weight: 1000;
+    letter-spacing: .2px;
+    line-height: 1.1;
+  }
+  .hero-score .big{
+    margin-top: 6px;
+    color:#fff;
+    font-size: clamp(24px, 3.1vw, 40px);
+    font-weight: 1150;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 10px 24px rgba(0,0,0,.35);
+  }
+  .hero-meter{
+    height: 10px;
+    border-radius: 999px;
+    margin-top: 10px;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.18);
+    overflow:hidden;
+  }
+  .hero-fill{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background: linear-gradient(90deg, rgba(255,255,255,.65), rgba(77,130,210,1));
+    transition: width .7s cubic-bezier(.2,.9,.2,1);
+  }
+  .hero-scale{
+    display:flex;
+    justify-content:space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: rgba(255,255,255,.80);
+    font-weight: 900;
+  }
+
   .hero h2{
     margin:0;
     position:absolute;
@@ -306,49 +364,43 @@
     line-height:1.05;
   }
 
-  .score{
+  /* January temperature card */
+  .tcard{
     border-radius: 20px;
     background: linear-gradient(180deg, #ffffff, #f6f9ff);
     border: 1px solid var(--border);
     padding: 16px 16px 14px;
     height: clamp(170px, 22vw, 240px);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
   }
-  .score .kicker{
+  .tcard-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 12px;
+  }
+  .tcard .kicker{
     font-size: 12px;
     font-weight: 1000;
     color: #2a3850;
     letter-spacing:.2px;
+    line-height: 1.1;
   }
-  .score .big{
+  .tcard .big{
     font-size: var(--t-score);
     font-weight: 1100;
     color: var(--ink);
     line-height:1;
-    margin-top: 6px;
+    margin-top: 8px;
     font-variant-numeric: tabular-nums;
   }
-  .meter{
-    height: 12px;
-    border-radius: 999px;
-    background: #e8f0ff;
-    border: 1px solid #d6e4ff;
-    overflow:hidden;
-    margin-top: 12px;
-  }
-  .fill{
-    height:100%;
-    width:0%;
-    border-radius:999px;
-    background: linear-gradient(90deg, var(--b3), var(--b5));
-    transition: width .7s cubic-bezier(.2,.9,.2,1);
-  }
-  .scale{
-    display:flex;
-    justify-content:space-between;
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--muted);
+  .tcard .sub{
+    margin-top: 8px;
+    font-size: 12px;
     font-weight: 900;
+    color: var(--muted);
   }
 
   /* Description */
@@ -363,13 +415,14 @@
     font-weight: 780;
   }
 
-  /* Metric cards (Image-2 style) */
+  /* Metric cards */
   .metrics{
     grid-column: 1 / -1;
     display:grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-content:start;
+    gap: var(--gap);      /* ✅ unified */
+    align-content:stretch;
+    grid-auto-rows: 1fr;  /* ✅ equal row heights */
   }
 
   .mcard{
@@ -378,6 +431,7 @@
     border: 1px solid var(--border);
     padding: 18px;
     min-height: 140px;
+    height: 100%;         /* ✅ all cards fill evenly */
     display:grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
@@ -497,7 +551,7 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* Narrow embeds (Action article column) */
+  /* Narrow embeds */
   @media (max-width: 900px){
     .layout{
       grid-template-columns: 1fr;
@@ -512,19 +566,19 @@
     .city-btn{ min-width: 320px; scroll-snap-align: start; }
   }
 
-  /* Small phones: allow taller widget */
+  /* Small phones */
   @media (max-width: 560px){
     .action-wc{ --widget-h: 1180px; }
     .board-inner{
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto auto;
+      grid-template-rows: auto auto auto 1fr;
     }
     .metrics{ grid-template-columns: 1fr; }
   }
 
   /* Reduce motion support */
   @media (prefers-reduced-motion: reduce){
-    .fill, .wFill, .mcard, .city-btn { transition:none !important; }
+    .hero-fill, .wFill, .mcard, .city-btn { transition:none !important; }
   }
 </style>
 
@@ -532,7 +586,6 @@
     <div class="head-top">
       <h3 class="title" id="wc-title">Winter Classic 2028 — Top Host City Preview</h3>
 
-      <!-- Replace with your real Action logo -->
       <div class="brand" aria-label="Brand">
         <img alt="Action logo" src="https://via.placeholder.com/140x40.png?text=Action+Logo">
         <strong>Action</strong>
@@ -617,14 +670,35 @@
           <div class="hero" id="heroCard">
             <img id="heroImg" alt="" loading="eager" decoding="async">
             <div class="overlay" aria-hidden="true"></div>
+
+            <div class="hero-score" aria-label="Winter Classic Score">
+              <div class="kicker" id="heroScoreKicker">Chicago Winter Classic Score</div>
+              <div class="big" id="heroScoreBig">66.02</div>
+              <div class="hero-meter" aria-hidden="true"><div class="hero-fill" id="heroScoreFill"></div></div>
+              <div class="hero-scale" aria-hidden="true"><span>0</span><span>100</span></div>
+            </div>
+
             <h2 id="heroTitle">Chicago</h2>
           </div>
 
-          <section class="score" aria-label="Winter Classic Score">
-            <div class="kicker" id="scoreKicker">Chicago Winter Classic Score</div>
-            <div class="big" id="scoreBig">66.02</div>
-            <div class="meter" aria-hidden="true"><div class="fill" id="scoreFill"></div></div>
-            <div class="scale"><span>0</span><span>100</span></div>
+          <section class="tcard" aria-label="January Temperature">
+            <div class="tcard-top">
+              <div>
+                <div class="kicker" id="tempKicker">January Temperature</div>
+                <div class="big" id="tempBig">25.6°F</div>
+                <div class="sub" id="tempSub">Avg Jan temp • weight 15%</div>
+              </div>
+              <div class="mIcon" aria-hidden="true" title="January Temperature">
+                <svg viewBox="0 0 24 24"><path d="M14 14.8V5a2 2 0 1 0-4 0v9.8a4 4 0 1 0 4 0Z"/><path d="M10 12h4"/></svg>
+              </div>
+            </div>
+
+            <div class="mBottom" style="margin-top:0;">
+              <div class="wBadge" id="tempWeight">15%</div>
+              <div class="wBar" aria-label="Weight bar">
+                <div class="wFill" style="width:15%;"></div>
+              </div>
+            </div>
           </section>
 
           <div class="desc" id="desc"></div>
@@ -643,7 +717,6 @@
   </footer>
 
 <script>
-  // Top-3 data (Wikimedia Commons)
   const CITIES = {
     "Chicago": {
       score: 66.02,
@@ -665,44 +738,58 @@
     }
   };
 
-  // Weights from methodology
+  const TEMP_METRIC = {
+    key:"temp",
+    title:"January Temperature",
+    weight:15,
+    value:(c)=> c.values.temp,
+    fmt:(n)=> `${n.toFixed(1)}°F`,
+    unit:"",
+  };
+
   const METRICS = [
     { key:"access",   title:"Airport & Travel",   weight:30, value:(c)=> c.values.access,   fmt:(n)=> n.toLocaleString(), unit:"pax",    icon: planeIcon() },
-    { key:"temp",     title:"January Climate",    weight:15, value:(c)=> c.values.temp,     fmt:(n)=> `${n.toFixed(1)}°F`, unit:"",      icon: tempIcon() },
     { key:"capacity", title:"Stadium Capacity",   weight:20, value:(c)=> c.values.capacity, fmt:(n)=> n.toLocaleString(),  unit:"Seats",  icon: stadiumIcon() },
     { key:"hotels",   title:"Hotel Availability", weight:15, value:(c)=> c.values.hotels,   fmt:(n)=> n.toLocaleString(),  unit:"Hotels", icon: hotelIcon() },
     { key:"fans",     title:"Hockey Fan Base",    weight:20, value:(c)=> c.values.fans,     fmt:(n)=> n.toLocaleString(),  unit:"Fans",   icon: fansIcon() },
   ];
 
-  // DOM
-  const root       = document.querySelector(".action-wc");
-  const heroTitle  = document.getElementById("heroTitle");
-  const heroImg    = document.getElementById("heroImg");
-  const scoreKicker= document.getElementById("scoreKicker");
-  const scoreBig   = document.getElementById("scoreBig");
-  const desc       = document.getElementById("desc");
-  const scoreFill  = document.getElementById("scoreFill");
-  const metricsEl  = document.getElementById("metrics");
+  const root            = document.querySelector(".action-wc");
+  const heroTitle       = document.getElementById("heroTitle");
+  const heroImg         = document.getElementById("heroImg");
+
+  const heroScoreKicker = document.getElementById("heroScoreKicker");
+  const heroScoreBig    = document.getElementById("heroScoreBig");
+  const heroScoreFill   = document.getElementById("heroScoreFill");
+
+  const tempKicker      = document.getElementById("tempKicker");
+  const tempBig         = document.getElementById("tempBig");
+  const tempSub         = document.getElementById("tempSub");
+  const tempWeight      = document.getElementById("tempWeight");
+
+  const desc            = document.getElementById("desc");
+  const metricsEl       = document.getElementById("metrics");
 
   function render(cityName){
     const d = CITIES[cityName];
     if(!d) return;
 
     heroTitle.textContent = cityName;
-    scoreKicker.textContent = `${cityName} Winter Classic Score`;
-    desc.textContent = d.desc;
 
-    scoreBig.textContent = d.score.toFixed(2);
-    scoreFill.style.width = Math.max(0, Math.min(100, d.score)) + "%";
-
-    // HERO IMAGE (real <img> so it reliably shows in embeds)
     heroImg.src = d.heroImg;
     heroImg.alt = `${cityName} skyline`;
+    heroImg.onerror = () => heroImg.removeAttribute("src");
 
-    // If an embed blocks/denies the image, keep it looking clean
-    heroImg.onerror = () => {
-      heroImg.removeAttribute("src");
-    };
+    heroScoreKicker.textContent = `${cityName} Winter Classic Score`;
+    heroScoreBig.textContent = d.score.toFixed(2);
+    heroScoreFill.style.width = Math.max(0, Math.min(100, d.score)) + "%";
+
+    tempKicker.textContent = "January Temperature";
+    tempBig.textContent = TEMP_METRIC.fmt(TEMP_METRIC.value(d));
+    tempSub.textContent = `Avg Jan temp • weight ${TEMP_METRIC.weight}%`;
+    tempWeight.textContent = `${TEMP_METRIC.weight}%`;
+
+    desc.textContent = d.desc;
 
     metricsEl.innerHTML = METRICS.map(m => {
       const raw = m.value(d);
@@ -728,7 +815,6 @@
     }).join("");
   }
 
-  // City buttons
   const btns = Array.from(document.querySelectorAll(".city-btn"));
   btns.forEach(b => {
     b.addEventListener("click", () => {
@@ -744,7 +830,6 @@
     });
   });
 
-  // Copy snippet (match widget height)
   const copyBtn = document.getElementById("copyBtn");
   copyBtn.addEventListener("click", async () => {
     const snippet =
@@ -752,7 +837,7 @@
   title="Winter Classic 2028 — Top Host City Preview"
   src="YOUR_EMBED_URL_HERE"
   width="100%"
-  height="980"
+  height="860"
   scrolling="no"
   style="border:0; overflow:hidden; display:block; width:100%;"
   loading="lazy"></iframe>`;
@@ -766,19 +851,15 @@
     }
   });
 
-  // Auto compact mode if container height is tight (prevents “only 2 metrics visible”)
   const ro = new ResizeObserver(entries => {
     const rect = entries[0].contentRect;
     root.classList.toggle("compact", rect.height < 920);
   });
   ro.observe(root);
 
-  // Init
   render("Chicago");
 
-  // Inline SVG icons
   function planeIcon(){ return `<svg viewBox="0 0 24 24"><path d="M2 16l20-6-20-6 5 6-5 6Z"/><path d="M7 12h15"/></svg>`; }
-  function tempIcon(){ return `<svg viewBox="0 0 24 24"><path d="M14 14.8V5a2 2 0 1 0-4 0v9.8a4 4 0 1 0 4 0Z"/><path d="M10 12h4"/></svg>`; }
   function stadiumIcon(){ return `<svg viewBox="0 0 24 24"><path d="M3 20V10l9-6 9 6v10"/><path d="M7 20v-6h10v6"/><path d="M9 11h6"/></svg>`; }
   function hotelIcon(){ return `<svg viewBox="0 0 24 24"><path d="M4 20V6a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v14"/><path d="M4 12h16"/><path d="M7 9h2"/><path d="M7 15h2"/></svg>`; }
   function fansIcon(){ return `<svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"/><path d="M6 21a6 6 0 0 1 12 0"/><path d="M20 21a5 5 0 0 0-6-4.5"/><path d="M4 21a5 5 0 0 1 6-4.5"/></svg>`; }
