@@ -547,17 +547,17 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* ✅ Slim swipe hint (no close button) */
+  /* ✅ Slim swipe hint (stays visible; updates text based on scroll position) */
   .swipe-hint{
     display:none;
     align-items:center;
     justify-content:center;
-    gap: 10px;
+    gap: 8px;
 
-    padding: 8px 10px;           /* smaller */
-    border-radius: 999px;        /* pill */
+    padding: 7px 10px;
+    border-radius: 999px;
     border: 1px solid rgba(255,255,255,.18);
-    background: rgba(255,255,255,.08);
+    background: rgba(255,255,255,.07);
     color:#fff;
     box-shadow: var(--shadow2);
 
@@ -565,6 +565,7 @@
     font-size: 12px;
     letter-spacing: .15px;
     line-height: 1;
+    user-select:none;
   }
   .swipe-hint .swipe-dot{
     width:8px; height:8px;
@@ -577,6 +578,8 @@
     font-weight: 1100;
     opacity:.95;
     flex:0 0 auto;
+    width: 18px;
+    text-align:center;
   }
   .swipe-hint .swipe-text{
     opacity:.95;
@@ -591,7 +594,6 @@
       min-height: unset;
     }
 
-    /* show the slim hint on narrow/mobile */
     .swipe-hint{ display:flex; }
 
     .rail{
@@ -635,11 +637,11 @@
   <div class="wrap">
     <div class="layout">
 
-      <!-- ✅ Slim swipe hint (no close button). Auto-hides after user swipes -->
-      <div class="swipe-hint" id="swipeHint" role="note" aria-label="Swipe left to view more">
+      <!-- ✅ Slim swipe hint (NO close). Text updates based on where you are in the rail. -->
+      <div class="swipe-hint" id="swipeHint" role="note" aria-label="Swipe hint">
         <span class="swipe-dot" aria-hidden="true"></span>
-        <span class="swipe-arrow" aria-hidden="true">←</span>
-        <span class="swipe-text">Swipe left to view more</span>
+        <span class="swipe-arrow" id="swipeArrow" aria-hidden="true">←</span>
+        <span class="swipe-text" id="swipeText">Swipe left to view more</span>
       </div>
 
       <aside class="rail" aria-label="City selector">
@@ -905,16 +907,50 @@
 
   render("Chicago");
 
-  /* ✅ Auto-hide slim swipe hint once user scrolls the rail */
+  /* ✅ Swipe hint: DO NOT hide. Update message based on rail position */
   (() => {
-    const hint = document.getElementById("swipeHint");
-    const rail = document.querySelector(".rail");
-    if(!hint || !rail) return;
+    const hint  = document.getElementById("swipeHint");
+    const rail  = document.querySelector(".rail");
+    const arrow = document.getElementById("swipeArrow");
+    const text  = document.getElementById("swipeText");
+    if(!hint || !rail || !arrow || !text) return;
 
-    const hide = () => { hint.style.display = "none"; };
-    rail.addEventListener("scroll", () => {
-      if (rail.scrollLeft > 10) hide();
-    }, { passive: true });
+    const EPS = 4; // px tolerance
+
+    function updateHint(){
+      // Show hint only if the rail actually overflows (has more to swipe)
+      const maxScroll = rail.scrollWidth - rail.clientWidth;
+      const hasOverflow = maxScroll > 2;
+      hint.style.display = hasOverflow ? "" : "none";
+      if(!hasOverflow) return;
+
+      const x = rail.scrollLeft;
+
+      const atLeft  = x <= EPS;
+      const atRight = x >= (maxScroll - EPS);
+
+      if(atLeft && !atRight){
+        arrow.textContent = "←";
+        text.textContent  = "Swipe left to view more";
+      } else if(atRight && !atLeft){
+        arrow.textContent = "→";
+        text.textContent  = "Swipe right to view more";
+      } else {
+        arrow.textContent = "↔";
+        text.textContent  = "Swipe left or right to view more";
+      }
+    }
+
+    // Update on scroll + resize (so it reacts to screen changes)
+    rail.addEventListener("scroll", updateHint, { passive:true });
+
+    const ro2 = new ResizeObserver(updateHint);
+    ro2.observe(rail);
+
+    // Also update after fonts/layout settle
+    window.addEventListener("load", updateHint);
+    requestAnimationFrame(updateHint);
+    setTimeout(updateHint, 250);
   })();
 
   function planeIcon(){ return `<svg viewBox="0 0 24 24"><path d="M2 16l20-6-20-6 5 6-5 6Z"/><path d="M7 12h15"/></svg>`; }
