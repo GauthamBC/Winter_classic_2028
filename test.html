@@ -11,7 +11,11 @@
 
   <style>
     html, body { height:100%; }
-    body { margin:0; background:#061225; }
+    body {
+      margin:0;
+      /* keep this dark, but the widget now fills the iframe so you won't see "extra" */
+      background:#061225;
+    }
   </style>
 </head>
 
@@ -40,11 +44,10 @@
     --shadow2: 0 12px 30px rgba(0,0,0,.22);
 
     /* unified spacing tokens */
-    --gap: 14px;        /* one gap to rule them all */
-    --inner-pad: 18px;  /* safe padding so cards/hover never clip */
-    --radius: 18px;
+    --gap: 14px;
+    --inner-pad: 18px;
 
-    /* ✅ increased slightly so bottom metric cards are fully visible */
+    /* widget height target (matches your iframe height) */
     --widget-h: 900px;
 
     --t-title: clamp(18px, 2.2vw, 28px);
@@ -59,15 +62,20 @@
   .action-wc.compact{
     --gap: 12px;
     --inner-pad: 16px;
-    /* ✅ also bumped a bit (was 820) */
     --widget-h: 860px;
   }
 
   section.action-wc{
+    /* KEY FIXES:
+       1) remove outer margin so no black strip above/below in iframe
+       2) square edges (no rounding) so header/footer look clean on dark bg
+       3) min-height:100% lets the widget stretch to fill iframe if iframe is slightly taller
+    */
     height: var(--widget-h);
+    min-height: 100%;
     max-width: 1040px;
-    margin: 16px auto;
-    border-radius: 22px;
+    margin: 0 auto;              /* ✅ no top/bottom gap */
+    border-radius: 0;            /* ✅ sharp outer edges */
     overflow:hidden;
     border: 1px solid rgba(255,255,255,.12);
     box-shadow: var(--shadow);
@@ -122,7 +130,7 @@
   .wrap{
     flex: 1 1 auto;
     min-height:0;
-    padding: 14px 14px 8px; /* slim space above footer */
+    padding: 14px 14px 10px; /* ✅ slight breathing room above footer */
     overflow:hidden;
   }
   .layout{
@@ -137,13 +145,13 @@
   .rail{
     display:flex;
     flex-direction:column;
-    gap: var(--gap); /* ✅ unified */
+    gap: var(--gap);
     height:100%;
     overflow:auto;
     padding-right: 6px;
   }
 
-  /* Branded scrollbar (rail + board) */
+  /* Branded scrollbar */
   .rail::-webkit-scrollbar,
   .board-inner::-webkit-scrollbar{
     width: 10px; height: 10px;
@@ -260,20 +268,19 @@
     pointer-events:none;
   }
 
-  /* ✅ even spacing + equal fill without bleeding */
   .board-inner{
     position:relative; z-index:1;
     padding: var(--inner-pad);
     display:grid;
     grid-template-columns: 1.1fr .9fr;
-    grid-template-rows: auto auto 1fr; /* metrics take remaining space */
+    grid-template-rows: auto auto 1fr;
     gap: var(--gap);
     align-content:stretch;
     height:100%;
     overflow:hidden;
   }
 
-  /* Hero city image card */
+  /* Hero */
   .hero{
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -299,7 +306,6 @@
     pointer-events:none;
   }
 
-  /* Score overlay inside hero */
   .hero-score{
     position:absolute;
     left: 14px;
