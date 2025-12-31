@@ -294,26 +294,79 @@
     transform: scale(1.02);
     filter: saturate(1.05) contrast(1.03);
   }
+
+  /* Light global overlay (keeps image crisp) */
   .hero .overlay{
     position:absolute; inset:0;
     background:
-      linear-gradient(90deg, rgba(11,39,77,.86) 0%, rgba(11,71,140,.40) 55%, rgba(11,86,170,.12) 78%, rgba(11,86,170,.08) 100%),
-      radial-gradient(120% 140% at 80% 10%, rgba(255,255,255,.14) 0%, transparent 60%);
+      radial-gradient(120% 140% at 80% 10%, rgba(255,255,255,.12) 0%, transparent 60%);
     pointer-events:none;
   }
 
-  .hero-score{
+  /* ✅ New top bar area holding City + Score */
+  .hero-top{
     position:absolute;
-    left: 14px;
+    left: 14px; right: 14px;
     top: 14px;
-    max-width: calc(100% - 28px);
-    padding: 10px 12px 10px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 12px;
+    z-index: 2;
+  }
+
+  /* ✅ Gradient ONLY behind the top UI (not the whole image) */
+  .hero-top::before{
+    content:"";
+    position:absolute;
+    left:-14px; right:-14px;
+    top:-14px;
+    height: 92px;
+    background:
+      linear-gradient(180deg, rgba(6,18,37,.78) 0%, rgba(6,18,37,.40) 55%, rgba(6,18,37,0) 100%),
+      radial-gradient(120% 160% at 10% 0%, rgba(77,130,210,.22) 0%, transparent 55%);
+    pointer-events:none;
+    z-index: -1;
+  }
+
+  /* City pill (top-left) */
+  .hero-city{
+    display:inline-flex;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 12px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.22);
-    background: rgba(6,18,37,.38);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 16px 34px rgba(0,0,0,.22);
+    background: rgba(6,18,37,.30);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    box-shadow: 0 16px 34px rgba(0,0,0,.18);
+    max-width: calc(100% - 240px); /* leaves room for score box on right */
+  }
+  .hero-city .city-txt{
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 1100;
+    letter-spacing: .2px;
+    color:#fff;
+    line-height:1.05;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-shadow: 0 10px 26px rgba(0,0,0,.35);
+  }
+
+  /* Score panel (top-right) */
+  .hero-score{
+    flex: 0 0 auto;
+    width: 226px;
+    max-width: 42%;
+    padding: 10px 12px 10px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.20);
+    background: linear-gradient(180deg, rgba(6,18,37,.40), rgba(6,18,37,.26));
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    box-shadow: 0 16px 34px rgba(0,0,0,.18);
   }
 
   .hero-score-top{
@@ -326,9 +379,9 @@
     border-radius: 10px;
     display:grid;
     place-items:center;
-    border: 1px solid rgba(255,255,255,.22);
-    background: rgba(255,255,255,.08);
-    box-shadow: 0 10px 20px rgba(0,0,0,.18);
+    border: 1px solid rgba(255,255,255,.20);
+    background: rgba(255,255,255,.07);
+    box-shadow: 0 10px 18px rgba(0,0,0,.14);
     flex: 0 0 auto;
   }
   .hero-score-ico svg{
@@ -340,36 +393,36 @@
     stroke-linejoin:round;
     opacity:.98;
   }
-
   .hero-score .kicker{
     color: rgba(255,255,255,.92);
     font-size: 12px;
     font-weight: 1000;
     letter-spacing: .2px;
     line-height: 1.1;
+    white-space:nowrap;
   }
   .hero-score .big{
     margin-top: 6px;
     color:#fff;
-    font-size: clamp(24px, 3.1vw, 40px);
+    font-size: clamp(22px, 2.8vw, 34px);
     font-weight: 1150;
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    text-shadow: 0 10px 24px rgba(0,0,0,.35);
+    text-shadow: 0 10px 22px rgba(0,0,0,.28);
   }
   .hero-meter{
     height: 10px;
     border-radius: 999px;
     margin-top: 10px;
     background: rgba(255,255,255,.14);
-    border: 1px solid rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.16);
     overflow:hidden;
   }
   .hero-fill{
     height:100%;
     width:0%;
     border-radius:999px;
-    background: linear-gradient(90deg, rgba(255,255,255,.65), rgba(77,130,210,1));
+    background: linear-gradient(90deg, rgba(255,255,255,.62), rgba(77,130,210,1));
     transition: width .7s cubic-bezier(.2,.9,.2,1);
   }
   .hero-scale{
@@ -379,18 +432,6 @@
     font-size: 11px;
     color: rgba(255,255,255,.80);
     font-weight: 900;
-  }
-
-  .hero h2{
-    margin:0;
-    position:absolute;
-    left:16px; bottom:14px;
-    font-size: clamp(28px, 3.4vw, 46px);
-    font-weight: 1100;
-    letter-spacing:.2px;
-    color:#fff;
-    text-shadow: 0 10px 30px rgba(0,0,0,.40);
-    line-height:1.05;
   }
 
   /* Temperature card */
@@ -579,7 +620,7 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* ✅ New: two small guidance buttons row */
+  /* Hint row */
   .hint-row{
     display:none;
     align-items:center;
@@ -636,7 +677,6 @@
       grid-template-rows: auto auto 1fr;
       min-height: unset;
     }
-
     .hint-row{ display:flex; }
 
     .rail{
@@ -650,6 +690,7 @@
     .board{ height: auto; }
   }
 
+  /* ✅ On small phones: let score shrink a bit + keep city readable */
   @media (max-width: 560px){
     .board-inner{
       grid-template-columns: 1fr;
@@ -658,6 +699,14 @@
       overflow: visible;
     }
     .metrics{ grid-template-columns: 1fr; }
+
+    .hero-top{ left: 12px; right: 12px; top: 12px; }
+    .hero-score{ width: 210px; max-width: 46%; }
+    .hero-city{ max-width: calc(100% - 210px); }
+    .hero-top::before{
+      left:-12px; right:-12px; top:-12px;
+      height: 96px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -679,7 +728,6 @@
   <div class="wrap">
     <div class="layout">
 
-      <!-- ✅ Two-button hint row (replaces old swipe pill) -->
       <div class="hint-row" aria-label="How to interact">
         <div class="hint-pill" id="pressHint" role="note" aria-label="Press a city to view more">
           <span class="dot" aria-hidden="true"></span>
@@ -769,29 +817,34 @@
             <img id="heroImg" alt="" loading="eager" decoding="async">
             <div class="overlay" aria-hidden="true"></div>
 
-            <div class="hero-score" aria-label="Winter Classic Score">
-              <div class="hero-score-top">
-                <span class="hero-score-ico" aria-hidden="true" title="Winter Classic Score">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M12 2v20"/>
-                    <path d="M5 5l14 14"/>
-                    <path d="M19 5L5 19"/>
-                    <path d="M4 12h16"/>
-                    <path d="M8 3l1.2 2.2"/>
-                    <path d="M16 3l-1.2 2.2"/>
-                    <path d="M8 21l1.2-2.2"/>
-                    <path d="M16 21l-1.2-2.2"/>
-                  </svg>
-                </span>
-                <div class="kicker" id="heroScoreKicker">Winter Classic Score</div>
+            <!-- ✅ City + Score live here now -->
+            <div class="hero-top" aria-label="Hero Top">
+              <div class="hero-city" aria-label="City name">
+                <div class="city-txt" id="heroTitle">Chicago</div>
               </div>
 
-              <div class="big" id="heroScoreBig">66.02</div>
-              <div class="hero-meter" aria-hidden="true"><div class="hero-fill" id="heroScoreFill"></div></div>
-              <div class="hero-scale" aria-hidden="true"><span>0</span><span>100</span></div>
-            </div>
+              <div class="hero-score" aria-label="Winter Classic Score">
+                <div class="hero-score-top">
+                  <span class="hero-score-ico" aria-hidden="true" title="Winter Classic Score">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2v20"/>
+                      <path d="M5 5l14 14"/>
+                      <path d="M19 5L5 19"/>
+                      <path d="M4 12h16"/>
+                      <path d="M8 3l1.2 2.2"/>
+                      <path d="M16 3l-1.2 2.2"/>
+                      <path d="M8 21l1.2-2.2"/>
+                      <path d="M16 21l-1.2-2.2"/>
+                    </svg>
+                  </span>
+                  <div class="kicker" id="heroScoreKicker">Winter Classic Score</div>
+                </div>
 
-            <h2 id="heroTitle">Chicago</h2>
+                <div class="big" id="heroScoreBig">66.02</div>
+                <div class="hero-meter" aria-hidden="true"><div class="hero-fill" id="heroScoreFill"></div></div>
+                <div class="hero-scale" aria-hidden="true"><span>0</span><span>100</span></div>
+              </div>
+            </div>
           </div>
 
           <section class="tcard" aria-label="January Temperature">
@@ -971,7 +1024,6 @@
 
   render("Chicago");
 
-  /* ✅ Keep only the swipe pill text dynamic: « Swipe » / « Swipe left » / « Swipe right » */
   (() => {
     const rail = document.querySelector(".rail");
     const swipeText = document.getElementById("swipeText");
