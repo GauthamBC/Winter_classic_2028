@@ -44,8 +44,8 @@
     --inner-pad: 18px;  /* safe padding so cards/hover never clip */
     --radius: 18px;
 
-    /* fixed widget height */
-    --widget-h: 860px;
+    /* ✅ increased slightly so bottom metric cards are fully visible */
+    --widget-h: 900px;
 
     --t-title: clamp(18px, 2.2vw, 28px);
     --t-city:  clamp(13px, 1.6vw, 16px);
@@ -59,7 +59,8 @@
   .action-wc.compact{
     --gap: 12px;
     --inner-pad: 16px;
-    --widget-h: 820px;
+    /* ✅ also bumped a bit (was 820) */
+    --widget-h: 860px;
   }
 
   section.action-wc{
@@ -420,9 +421,9 @@
     grid-column: 1 / -1;
     display:grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--gap);      /* ✅ unified */
+    gap: var(--gap);
     align-content:stretch;
-    grid-auto-rows: 1fr;  /* ✅ equal row heights */
+    grid-auto-rows: 1fr;
   }
 
   .mcard{
@@ -431,7 +432,7 @@
     border: 1px solid var(--border);
     padding: 18px;
     min-height: 140px;
-    height: 100%;         /* ✅ all cards fill evenly */
+    height: 100%;
     display:grid;
     grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
@@ -837,7 +838,7 @@
   title="Winter Classic 2028 — Top Host City Preview"
   src="YOUR_EMBED_URL_HERE"
   width="100%"
-  height="860"
+  height="900"
   scrolling="no"
   style="border:0; overflow:hidden; display:block; width:100%;"
   loading="lazy"></iframe>`;
