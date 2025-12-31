@@ -10,11 +10,12 @@
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 
   <style>
+    /* Make the iframe page fill its frame */
     html, body { height:100%; }
     body {
       margin:0;
-      /* keep this dark, but the widget now fills the iframe so you won't see "extra" */
       background:#061225;
+      overflow:hidden; /* prevent body scroll; we scroll inside .wrap */
     }
   </style>
 </head>
@@ -47,9 +48,6 @@
     --gap: 14px;
     --inner-pad: 18px;
 
-    /* widget height target (matches your iframe height) */
-    --widget-h: 900px;
-
     --t-title: clamp(18px, 2.2vw, 28px);
     --t-city:  clamp(13px, 1.6vw, 16px);
     --t-score: clamp(28px, 3.4vw, 46px);
@@ -62,20 +60,20 @@
   .action-wc.compact{
     --gap: 12px;
     --inner-pad: 16px;
-    --widget-h: 860px;
   }
 
   section.action-wc{
-    /* KEY FIXES:
-       1) remove outer margin so no black strip above/below in iframe
-       2) square edges (no rounding) so header/footer look clean on dark bg
-       3) min-height:100% lets the widget stretch to fill iframe if iframe is slightly taller
+    /* ✅ MOBILE FIX:
+       - Fill the iframe height instead of a fixed pixel height
+       - Keep header/footer fixed; make .wrap the scroll area
     */
-    height: var(--widget-h);
+    height: 100%;
     min-height: 100%;
+    max-height: 100%;
+
     max-width: 1040px;
-    margin: 0 auto;              /* ✅ no top/bottom gap */
-    border-radius: 0;            /* ✅ sharp outer edges */
+    margin: 0 auto;
+    border-radius: 0;
     overflow:hidden;
     border: 1px solid rgba(255,255,255,.12);
     box-shadow: var(--shadow);
@@ -97,6 +95,7 @@
       linear-gradient(92deg, var(--b1) 0%, var(--b2) 35%, var(--b3) 62%, var(--b4) 82%, var(--b5) 100%);
     position:relative;
     overflow:hidden;
+    flex: 0 0 auto;
   }
   .head-top{
     display:flex;
@@ -130,11 +129,16 @@
   .wrap{
     flex: 1 1 auto;
     min-height:0;
-    padding: 14px 14px 10px; /* ✅ slight breathing room above footer */
-    overflow:hidden;
+    padding: 14px 14px 10px;
+
+    /* ✅ THIS is the vertical scroll area inside the iframe */
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
   }
+
   .layout{
-    height:100%;
+    /* Keep desktop feeling “full height”, but allow content to grow on mobile */
+    min-height: 100%;
     display:grid;
     grid-template-columns: 300px 1fr;
     gap: var(--gap);
@@ -151,23 +155,26 @@
     padding-right: 6px;
   }
 
-  /* Branded scrollbar */
+  /* Branded scrollbar (including the main scroll container .wrap) */
   .rail::-webkit-scrollbar,
-  .board-inner::-webkit-scrollbar{
+  .board-inner::-webkit-scrollbar,
+  .wrap::-webkit-scrollbar{
     width: 10px; height: 10px;
   }
   .rail::-webkit-scrollbar-track,
-  .board-inner::-webkit-scrollbar-track{
+  .board-inner::-webkit-scrollbar-track,
+  .wrap::-webkit-scrollbar-track{
     background: rgba(255,255,255,.08);
     border-radius: 999px;
   }
   .rail::-webkit-scrollbar-thumb,
-  .board-inner::-webkit-scrollbar-thumb{
+  .board-inner::-webkit-scrollbar-thumb,
+  .wrap::-webkit-scrollbar-thumb{
     background: linear-gradient(180deg, var(--b4), var(--b5));
     border-radius: 999px;
     border: 2px solid rgba(6,18,37,.65);
   }
-  .rail, .board-inner{
+  .rail, .board-inner, .wrap{
     scrollbar-width: thin;
     scrollbar-color: var(--b4) rgba(255,255,255,.10);
   }
@@ -543,6 +550,7 @@
     align-items:center;
     justify-content:space-between;
     gap: 12px;
+    flex: 0 0 auto;
   }
   .foot small{ opacity:.92; font-weight: 850; font-size: 12px; }
   .copy-btn{
@@ -563,22 +571,27 @@
     .layout{
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
+      min-height: unset; /* allow natural height if needed */
     }
     .rail{
       flex-direction:row;
       overflow:auto;
       padding: 0 2px 8px;
       scroll-snap-type: x mandatory;
+      height: auto;
     }
     .city-btn{ min-width: 320px; scroll-snap-align: start; }
+    .board{ height: auto; } /* let content define height */
   }
 
   /* Small phones */
   @media (max-width: 560px){
-    .action-wc{ --widget-h: 1180px; }
+    /* ✅ Remove “taller than iframe” behavior; instead we scroll within .wrap */
     .board-inner{
       grid-template-columns: 1fr;
       grid-template-rows: auto auto auto 1fr;
+      height: auto;         /* allow it to expand */
+      overflow: visible;    /* allow expansion */
     }
     .metrics{ grid-template-columns: 1fr; }
   }
@@ -858,6 +871,7 @@
     }
   });
 
+  /* Compact mode based on actual iframe height */
   const ro = new ResizeObserver(entries => {
     const rect = entries[0].contentRect;
     root.classList.toggle("compact", rect.height < 920);
