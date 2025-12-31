@@ -5,17 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Winter Classic 2028 — Top Host City Preview (Action)</title>
 
-  <!-- Helps images load faster in embeds -->
   <link rel="preconnect" href="https://commons.wikimedia.org">
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 
   <style>
     html, body { height:100%; }
-    body {
-      margin:0;
-      background:#061225;
-      overflow:hidden; /* prevent body scroll; we scroll inside .wrap */
-    }
+    body { margin:0; background:#061225; overflow:hidden; }
   </style>
 </head>
 
@@ -166,12 +161,14 @@
     align-items:center;
     justify-content:space-between;
     gap: 10px;
+
     width:100%;
     text-align:left;
     padding: 14px 14px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.18);
     background: rgba(255,255,255,.10);
+
     color:#fff;
     box-shadow: var(--shadow2);
     cursor:pointer;
@@ -185,11 +182,22 @@
     background: rgba(11,86,170,.18);
     box-shadow: 0 16px 32px rgba(0,0,0,.28);
   }
+
   .city-btn[aria-pressed="true"]{
-    border-color: rgba(77,130,210,.75);
+    border-color: rgba(77,130,210,.85);
     background:
-      radial-gradient(120% 160% at 50% 0%, rgba(77,130,210,.30) 0%, transparent 60%),
-      rgba(255,255,255,.12);
+      radial-gradient(140% 160% at 20% 0%, rgba(77,130,210,.42) 0%, transparent 58%),
+      linear-gradient(180deg, rgba(8,94,186,.38) 0%, rgba(11,39,77,.22) 100%),
+      rgba(255,255,255,.10);
+    box-shadow: 0 18px 36px rgba(0,0,0,.32);
+  }
+  .city-btn[aria-pressed="true"]::after{
+    content:"";
+    position:absolute; inset:0;
+    pointer-events:none;
+    background: linear-gradient(90deg, rgba(255,255,255,.10), transparent 55%);
+    mix-blend-mode: overlay;
+    opacity:.75;
   }
 
   .city-left{ display:flex;align-items:center;gap:12px;min-width:0; }
@@ -307,6 +315,32 @@
     -webkit-backdrop-filter: blur(6px);
     box-shadow: 0 16px 34px rgba(0,0,0,.22);
   }
+
+  .hero-score-top{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+  }
+  .hero-score-ico{
+    width: 22px; height: 22px;
+    border-radius: 10px;
+    display:grid;
+    place-items:center;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.08);
+    box-shadow: 0 10px 20px rgba(0,0,0,.18);
+    flex: 0 0 auto;
+  }
+  .hero-score-ico svg{
+    width:14px;height:14px;
+    stroke: rgba(255,255,255,.92);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    opacity:.98;
+  }
+
   .hero-score .kicker{
     color: rgba(255,255,255,.92);
     font-size: 12px;
@@ -398,7 +432,6 @@
     color: var(--muted);
   }
 
-  /* Description */
   .desc{
     grid-column: 1 / -1;
     border-radius: 18px;
@@ -410,7 +443,6 @@
     font-weight: 780;
   }
 
-  /* Metric cards */
   .metrics{
     grid-column: 1 / -1;
     display:grid;
@@ -547,46 +579,57 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* ✅ Slim swipe hint (stays visible; updates text based on scroll position) */
-  .swipe-hint{
+  /* ✅ New: two small guidance buttons row */
+  .hint-row{
     display:none;
     align-items:center;
     justify-content:center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 2px 0;
+  }
+  .hint-pill{
+    display:inline-flex;
+    align-items:center;
     gap: 8px;
-
     padding: 7px 10px;
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,.18);
     background: rgba(255,255,255,.07);
     color:#fff;
     box-shadow: var(--shadow2);
-
     font-weight: 950;
     font-size: 12px;
     letter-spacing: .15px;
     line-height: 1;
     user-select:none;
+    white-space: nowrap;
   }
-  .swipe-hint .swipe-dot{
+  .hint-pill .dot{
     width:8px; height:8px;
     border-radius:999px;
     background: linear-gradient(180deg, var(--b4), var(--b5));
     box-shadow: 0 10px 20px rgba(0,0,0,.18);
     flex:0 0 auto;
   }
-  .swipe-hint .swipe-arrow{
-    font-weight: 1100;
-    opacity:.95;
+  .hint-pill .mini-ico{
+    width:18px;height:18px;
+    display:grid;place-items:center;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.06);
     flex:0 0 auto;
-    width: 18px;
-    text-align:center;
   }
-  .swipe-hint .swipe-text{
+  .hint-pill .mini-ico svg{
+    width:12px;height:12px;
+    stroke: rgba(255,255,255,.92);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
     opacity:.95;
-    white-space: nowrap;
   }
 
-  /* Narrow embeds */
   @media (max-width: 900px){
     .layout{
       grid-template-columns: 1fr;
@@ -594,7 +637,7 @@
       min-height: unset;
     }
 
-    .swipe-hint{ display:flex; }
+    .hint-row{ display:flex; }
 
     .rail{
       flex-direction:row;
@@ -607,7 +650,6 @@
     .board{ height: auto; }
   }
 
-  /* Small phones */
   @media (max-width: 560px){
     .board-inner{
       grid-template-columns: 1fr;
@@ -637,11 +679,19 @@
   <div class="wrap">
     <div class="layout">
 
-      <!-- ✅ Slim swipe hint (NO close). Text updates based on where you are in the rail. -->
-      <div class="swipe-hint" id="swipeHint" role="note" aria-label="Swipe hint">
-        <span class="swipe-dot" aria-hidden="true"></span>
-        <span class="swipe-arrow" id="swipeArrow" aria-hidden="true">←</span>
-        <span class="swipe-text" id="swipeText">Swipe left to view more</span>
+      <!-- ✅ Two-button hint row (replaces old swipe pill) -->
+      <div class="hint-row" aria-label="How to interact">
+        <div class="hint-pill" id="pressHint" role="note" aria-label="Press a city to view more">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Press a city to view more</span>
+        </div>
+
+        <div class="hint-pill" id="swipeHint" role="note" aria-label="Swipe hint">
+          <span class="mini-ico" aria-hidden="true" title="Swipe">
+            <svg viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5"/><path d="M16 17l5-5-5-5"/></svg>
+          </span>
+          <span id="swipeText">&laquo; Swipe &raquo;</span>
+        </div>
       </div>
 
       <aside class="rail" aria-label="City selector">
@@ -720,7 +770,22 @@
             <div class="overlay" aria-hidden="true"></div>
 
             <div class="hero-score" aria-label="Winter Classic Score">
-              <div class="kicker" id="heroScoreKicker">Chicago Winter Classic Score</div>
+              <div class="hero-score-top">
+                <span class="hero-score-ico" aria-hidden="true" title="Winter Classic Score">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M12 2v20"/>
+                    <path d="M5 5l14 14"/>
+                    <path d="M19 5L5 19"/>
+                    <path d="M4 12h16"/>
+                    <path d="M8 3l1.2 2.2"/>
+                    <path d="M16 3l-1.2 2.2"/>
+                    <path d="M8 21l1.2-2.2"/>
+                    <path d="M16 21l-1.2-2.2"/>
+                  </svg>
+                </span>
+                <div class="kicker" id="heroScoreKicker">Winter Classic Score</div>
+              </div>
+
               <div class="big" id="heroScoreBig">66.02</div>
               <div class="hero-meter" aria-hidden="true"><div class="hero-fill" id="heroScoreFill"></div></div>
               <div class="hero-scale" aria-hidden="true"><span>0</span><span>100</span></div>
@@ -827,7 +892,7 @@
     heroImg.alt = `${cityName} skyline`;
     heroImg.onerror = () => heroImg.removeAttribute("src");
 
-    heroScoreKicker.textContent = `${cityName} Winter Classic Score`;
+    heroScoreKicker.textContent = "Winter Classic Score";
     heroScoreBig.textContent = d.score.toFixed(2);
     heroScoreFill.style.width = Math.max(0, Math.min(100, d.score)) + "%";
 
@@ -898,7 +963,6 @@
     }
   });
 
-  /* Compact mode based on actual iframe height */
   const ro = new ResizeObserver(entries => {
     const rect = entries[0].contentRect;
     root.classList.toggle("compact", rect.height < 920);
@@ -907,50 +971,41 @@
 
   render("Chicago");
 
-  /* ✅ Swipe hint: DO NOT hide. Update message based on rail position */
+  /* ✅ Keep only the swipe pill text dynamic: « Swipe » / « Swipe left » / « Swipe right » */
   (() => {
-    const hint  = document.getElementById("swipeHint");
-    const rail  = document.querySelector(".rail");
-    const arrow = document.getElementById("swipeArrow");
-    const text  = document.getElementById("swipeText");
-    if(!hint || !rail || !arrow || !text) return;
+    const rail = document.querySelector(".rail");
+    const swipeText = document.getElementById("swipeText");
+    if(!rail || !swipeText) return;
 
-    const EPS = 4; // px tolerance
+    const EPS = 4;
 
-    function updateHint(){
-      // Show hint only if the rail actually overflows (has more to swipe)
+    function update(){
       const maxScroll = rail.scrollWidth - rail.clientWidth;
-      const hasOverflow = maxScroll > 2;
-      hint.style.display = hasOverflow ? "" : "none";
-      if(!hasOverflow) return;
+      if(maxScroll <= 2){
+        swipeText.textContent = "Swipe";
+        return;
+      }
 
       const x = rail.scrollLeft;
-
       const atLeft  = x <= EPS;
       const atRight = x >= (maxScroll - EPS);
 
       if(atLeft && !atRight){
-        arrow.textContent = "←";
-        text.textContent  = "Swipe left to view more";
+        swipeText.innerHTML = "&laquo; Swipe left &raquo;";
       } else if(atRight && !atLeft){
-        arrow.textContent = "→";
-        text.textContent  = "Swipe right to view more";
+        swipeText.innerHTML = "&laquo; Swipe right &raquo;";
       } else {
-        arrow.textContent = "↔";
-        text.textContent  = "Swipe left or right to view more";
+        swipeText.innerHTML = "&laquo; Swipe &raquo;";
       }
     }
 
-    // Update on scroll + resize (so it reacts to screen changes)
-    rail.addEventListener("scroll", updateHint, { passive:true });
-
-    const ro2 = new ResizeObserver(updateHint);
+    rail.addEventListener("scroll", update, { passive:true });
+    const ro2 = new ResizeObserver(update);
     ro2.observe(rail);
 
-    // Also update after fonts/layout settle
-    window.addEventListener("load", updateHint);
-    requestAnimationFrame(updateHint);
-    setTimeout(updateHint, 250);
+    window.addEventListener("load", update);
+    requestAnimationFrame(update);
+    setTimeout(update, 250);
   })();
 
   function planeIcon(){ return `<svg viewBox="0 0 24 24"><path d="M2 16l20-6-20-6 5 6-5 6Z"/><path d="M7 12h15"/></svg>`; }
