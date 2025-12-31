@@ -10,7 +10,6 @@
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
 
   <style>
-    /* Make the iframe page fill its frame */
     html, body { height:100%; }
     body {
       margin:0;
@@ -31,20 +30,14 @@
   }
 
   .action-wc{
-    /* Action Network blues */
     --b1:#0B274D; --b2:#0B478C; --b3:#0B56AA; --b4:#085EBA; --b5:#4D82D2;
-
     --ink:#0B1220;
     --muted:#556277;
 
-    --card:#ffffff;
-    --card2:#f7fbff;
     --border:#d7e2f3;
-
     --shadow: 0 20px 55px rgba(0,0,0,.30);
     --shadow2: 0 12px 30px rgba(0,0,0,.22);
 
-    /* unified spacing tokens */
     --gap: 14px;
     --inner-pad: 18px;
 
@@ -56,18 +49,15 @@
     --t-card-value: clamp(14px, 1.6vw, 18px);
   }
 
-  /* Auto-compact when the embed container is short */
   .action-wc.compact{
     --gap: 12px;
     --inner-pad: 16px;
   }
 
   section.action-wc{
-    /* ✅ Fill the iframe height */
     height: 100%;
     min-height: 100%;
     max-height: 100%;
-
     max-width: 1040px;
     margin: 0 auto;
     border-radius: 0;
@@ -107,7 +97,6 @@
     letter-spacing:.2px;
     line-height:1.12;
   }
-
   .brand{
     display:flex;align-items:center;gap:10px;
     padding: 8px 10px;
@@ -122,13 +111,11 @@
   }
   .brand strong{ font-weight: 1000; font-size: 12px; }
 
-  /* Body layout */
+  /* Body */
   .wrap{
     flex: 1 1 auto;
     min-height:0;
     padding: 14px 14px 10px;
-
-    /* ✅ Main vertical scroll area inside iframe */
     overflow:auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -141,7 +128,6 @@
     align-items:stretch;
   }
 
-  /* City rail */
   .rail{
     display:flex;
     flex-direction:column;
@@ -151,7 +137,7 @@
     padding-right: 6px;
   }
 
-  /* Branded scrollbar (including .wrap) */
+  /* Branded scrollbars (incl wrap) */
   .rail::-webkit-scrollbar,
   .board-inner::-webkit-scrollbar,
   .wrap::-webkit-scrollbar{
@@ -180,7 +166,6 @@
     align-items:center;
     justify-content:space-between;
     gap: 10px;
-
     width:100%;
     text-align:left;
     padding: 14px 14px;
@@ -374,7 +359,7 @@
     line-height:1.05;
   }
 
-  /* January temperature card */
+  /* Temperature card */
   .tcard{
     border-radius: 20px;
     background: linear-gradient(180deg, #ffffff, #f6f9ff);
@@ -562,56 +547,40 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* ✅ Swipe hint (mobile) */
+  /* ✅ Slim swipe hint (no close button) */
   .swipe-hint{
-    display:none; /* hidden on desktop */
+    display:none;
     align-items:center;
-    justify-content:space-between;
+    justify-content:center;
     gap: 10px;
 
-    padding: 10px 12px;
-    border-radius: 16px;
+    padding: 8px 10px;           /* smaller */
+    border-radius: 999px;        /* pill */
     border: 1px solid rgba(255,255,255,.18);
-    background: rgba(255,255,255,.10);
+    background: rgba(255,255,255,.08);
     color:#fff;
     box-shadow: var(--shadow2);
+
+    font-weight: 950;
+    font-size: 12px;
+    letter-spacing: .15px;
+    line-height: 1;
   }
-  .swipe-hint-left{
-    display:inline-flex;
-    align-items:center;
-    gap: 8px;
-    flex: 0 0 auto;
-  }
-  .swipe-dot{
-    width:10px; height:10px;
+  .swipe-hint .swipe-dot{
+    width:8px; height:8px;
     border-radius:999px;
     background: linear-gradient(180deg, var(--b4), var(--b5));
-    box-shadow: 0 10px 20px rgba(0,0,0,.22);
+    box-shadow: 0 10px 20px rgba(0,0,0,.18);
+    flex:0 0 auto;
   }
-  .swipe-arrow{
+  .swipe-hint .swipe-arrow{
     font-weight: 1100;
     opacity:.95;
+    flex:0 0 auto;
   }
-  .swipe-hint-text{
-    font-weight: 950;
-    font-size: 13px;
-    opacity: .95;
+  .swipe-hint .swipe-text{
+    opacity:.95;
     white-space: nowrap;
-    overflow:hidden;
-    text-overflow: ellipsis;
-  }
-  .swipe-hint-close{
-    border: 1px solid rgba(255,255,255,.22);
-    background: rgba(6,18,37,.25);
-    color:#fff;
-    font-weight: 1000;
-    padding: 8px 10px;
-    border-radius: 12px;
-    cursor:pointer;
-    white-space:nowrap;
-  }
-  .swipe-hint-close:hover{
-    background: rgba(255,255,255,.12);
   }
 
   /* Narrow embeds */
@@ -622,7 +591,7 @@
       min-height: unset;
     }
 
-    /* show the hint only on narrow/mobile */
+    /* show the slim hint on narrow/mobile */
     .swipe-hint{ display:flex; }
 
     .rail{
@@ -647,7 +616,6 @@
     .metrics{ grid-template-columns: 1fr; }
   }
 
-  /* Reduce motion support */
   @media (prefers-reduced-motion: reduce){
     .hero-fill, .wFill, .mcard, .city-btn { transition:none !important; }
   }
@@ -667,18 +635,11 @@
   <div class="wrap">
     <div class="layout">
 
-      <!-- ✅ Swipe hint above cities (only visible under 900px) -->
-      <div class="swipe-hint" id="swipeHint" role="note" aria-label="Swipe hint">
-        <span class="swipe-hint-left" aria-hidden="true">
-          <span class="swipe-dot"></span>
-          <span class="swipe-arrow">←</span>
-        </span>
-
-        <span class="swipe-hint-text">Swipe left to view more</span>
-
-        <button class="swipe-hint-close" id="swipeHintClose" type="button" aria-label="Close swipe hint">
-          Close ×
-        </button>
+      <!-- ✅ Slim swipe hint (no close button). Auto-hides after user swipes -->
+      <div class="swipe-hint" id="swipeHint" role="note" aria-label="Swipe left to view more">
+        <span class="swipe-dot" aria-hidden="true"></span>
+        <span class="swipe-arrow" aria-hidden="true">←</span>
+        <span class="swipe-text">Swipe left to view more</span>
       </div>
 
       <aside class="rail" aria-label="City selector">
@@ -787,7 +748,6 @@
           </section>
 
           <div class="desc" id="desc"></div>
-
           <div class="metrics" id="metrics"></div>
 
         </div>
@@ -945,35 +905,15 @@
 
   render("Chicago");
 
-  /* ✅ Swipe hint behavior (mobile) */
+  /* ✅ Auto-hide slim swipe hint once user scrolls the rail */
   (() => {
     const hint = document.getElementById("swipeHint");
-    const closeBtn = document.getElementById("swipeHintClose");
     const rail = document.querySelector(".rail");
+    if(!hint || !rail) return;
 
-    if(!hint || !closeBtn || !rail) return;
-
-    // If dismissed this session, keep hidden
-    if (sessionStorage.getItem("wcSwipeHintDismissed") === "1") {
-      hint.style.display = "none";
-      return;
-    }
-
-    const dismiss = () => {
-      hint.style.display = "none";
-      sessionStorage.setItem("wcSwipeHintDismissed", "1");
-    };
-
-    closeBtn.addEventListener("click", dismiss);
-
-    // Auto-dismiss once user starts scrolling the rail
-    let dismissedByScroll = false;
+    const hide = () => { hint.style.display = "none"; };
     rail.addEventListener("scroll", () => {
-      if (dismissedByScroll) return;
-      if (rail.scrollLeft > 10) {
-        dismissedByScroll = true;
-        dismiss();
-      }
+      if (rail.scrollLeft > 10) hide();
     }, { passive: true });
   })();
 
