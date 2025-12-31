@@ -63,10 +63,7 @@
   }
 
   section.action-wc{
-    /* ✅ MOBILE FIX:
-       - Fill the iframe height instead of a fixed pixel height
-       - Keep header/footer fixed; make .wrap the scroll area
-    */
+    /* ✅ Fill the iframe height */
     height: 100%;
     min-height: 100%;
     max-height: 100%;
@@ -131,13 +128,12 @@
     min-height:0;
     padding: 14px 14px 10px;
 
-    /* ✅ THIS is the vertical scroll area inside the iframe */
+    /* ✅ Main vertical scroll area inside iframe */
     overflow:auto;
     -webkit-overflow-scrolling: touch;
   }
 
   .layout{
-    /* Keep desktop feeling “full height”, but allow content to grow on mobile */
     min-height: 100%;
     display:grid;
     grid-template-columns: 300px 1fr;
@@ -155,7 +151,7 @@
     padding-right: 6px;
   }
 
-  /* Branded scrollbar (including the main scroll container .wrap) */
+  /* Branded scrollbar (including .wrap) */
   .rail::-webkit-scrollbar,
   .board-inner::-webkit-scrollbar,
   .wrap::-webkit-scrollbar{
@@ -566,13 +562,69 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
+  /* ✅ Swipe hint (mobile) */
+  .swipe-hint{
+    display:none; /* hidden on desktop */
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.18);
+    background: rgba(255,255,255,.10);
+    color:#fff;
+    box-shadow: var(--shadow2);
+  }
+  .swipe-hint-left{
+    display:inline-flex;
+    align-items:center;
+    gap: 8px;
+    flex: 0 0 auto;
+  }
+  .swipe-dot{
+    width:10px; height:10px;
+    border-radius:999px;
+    background: linear-gradient(180deg, var(--b4), var(--b5));
+    box-shadow: 0 10px 20px rgba(0,0,0,.22);
+  }
+  .swipe-arrow{
+    font-weight: 1100;
+    opacity:.95;
+  }
+  .swipe-hint-text{
+    font-weight: 950;
+    font-size: 13px;
+    opacity: .95;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+  .swipe-hint-close{
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(6,18,37,.25);
+    color:#fff;
+    font-weight: 1000;
+    padding: 8px 10px;
+    border-radius: 12px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .swipe-hint-close:hover{
+    background: rgba(255,255,255,.12);
+  }
+
   /* Narrow embeds */
   @media (max-width: 900px){
     .layout{
       grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      min-height: unset; /* allow natural height if needed */
+      grid-template-rows: auto auto 1fr;
+      min-height: unset;
     }
+
+    /* show the hint only on narrow/mobile */
+    .swipe-hint{ display:flex; }
+
     .rail{
       flex-direction:row;
       overflow:auto;
@@ -581,17 +633,16 @@
       height: auto;
     }
     .city-btn{ min-width: 320px; scroll-snap-align: start; }
-    .board{ height: auto; } /* let content define height */
+    .board{ height: auto; }
   }
 
   /* Small phones */
   @media (max-width: 560px){
-    /* ✅ Remove “taller than iframe” behavior; instead we scroll within .wrap */
     .board-inner{
       grid-template-columns: 1fr;
       grid-template-rows: auto auto auto 1fr;
-      height: auto;         /* allow it to expand */
-      overflow: visible;    /* allow expansion */
+      height: auto;
+      overflow: visible;
     }
     .metrics{ grid-template-columns: 1fr; }
   }
@@ -615,6 +666,20 @@
 
   <div class="wrap">
     <div class="layout">
+
+      <!-- ✅ Swipe hint above cities (only visible under 900px) -->
+      <div class="swipe-hint" id="swipeHint" role="note" aria-label="Swipe hint">
+        <span class="swipe-hint-left" aria-hidden="true">
+          <span class="swipe-dot"></span>
+          <span class="swipe-arrow">←</span>
+        </span>
+
+        <span class="swipe-hint-text">Swipe left to view more</span>
+
+        <button class="swipe-hint-close" id="swipeHintClose" type="button" aria-label="Close swipe hint">
+          Close ×
+        </button>
+      </div>
 
       <aside class="rail" aria-label="City selector">
         <button class="city-btn" type="button" data-city="Chicago" aria-pressed="true">
@@ -879,6 +944,38 @@
   ro.observe(root);
 
   render("Chicago");
+
+  /* ✅ Swipe hint behavior (mobile) */
+  (() => {
+    const hint = document.getElementById("swipeHint");
+    const closeBtn = document.getElementById("swipeHintClose");
+    const rail = document.querySelector(".rail");
+
+    if(!hint || !closeBtn || !rail) return;
+
+    // If dismissed this session, keep hidden
+    if (sessionStorage.getItem("wcSwipeHintDismissed") === "1") {
+      hint.style.display = "none";
+      return;
+    }
+
+    const dismiss = () => {
+      hint.style.display = "none";
+      sessionStorage.setItem("wcSwipeHintDismissed", "1");
+    };
+
+    closeBtn.addEventListener("click", dismiss);
+
+    // Auto-dismiss once user starts scrolling the rail
+    let dismissedByScroll = false;
+    rail.addEventListener("scroll", () => {
+      if (dismissedByScroll) return;
+      if (rail.scrollLeft > 10) {
+        dismissedByScroll = true;
+        dismiss();
+      }
+    }, { passive: true });
+  })();
 
   function planeIcon(){ return `<svg viewBox="0 0 24 24"><path d="M2 16l20-6-20-6 5 6-5 6Z"/><path d="M7 12h15"/></svg>`; }
   function stadiumIcon(){ return `<svg viewBox="0 0 24 24"><path d="M3 20V10l9-6 9 6v10"/><path d="M7 20v-6h10v6"/><path d="M9 11h6"/></svg>`; }
