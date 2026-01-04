@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Winter Classic 2028 — Top Host City Preview (Action)</title>
+  <title>Winter Classic 2028 — Top Host Cities (Action)</title>
 
   <link rel="preconnect" href="https://commons.wikimedia.org">
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
@@ -245,7 +245,21 @@
     flex:0 0 auto;
     box-shadow: 0 10px 22px rgba(0,0,0,.22);
   }
-  .flag img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* ✅ default = cover (keeps your current look) */
+  .flag img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  /* ✅ only for flags that need the emblem visible (Las Vegas / Nevada) */
+  .flag.fit-contain img{
+    object-fit: contain;
+    object-position: center;
+    padding: 4px;
+  }
 
   .city-name{
     font-size: var(--t-city);
@@ -818,7 +832,7 @@
 
   <header class="head">
     <div class="head-top">
-      <h3 class="title" id="wc-title">Winter Classic 2028 — Top Host City Preview</h3>
+      <h3 class="title" id="wc-title">Winter Classic 2028 — Top Host Cities</h3>
 
       <div class="brand" aria-label="Brand">
         <img alt="Action logo" src="https://i.postimg.cc/x1nG117r/AN-final2-logo.png">
@@ -1077,7 +1091,8 @@
             ${r.rank}
           </span>
 
-          <span class="flag" aria-hidden="true">
+          <!-- ✅ Las Vegas uses contain so the Nevada emblem isn't cropped -->
+          <span class="flag ${r.city === "Las Vegas" ? "fit-contain" : ""}" aria-hidden="true">
             <img alt="${escapeHtml(r.state)} flag" loading="lazy" decoding="async" src="${r.flagImg}">
           </span>
 
@@ -1178,8 +1193,8 @@
   copyBtn.addEventListener("click", async () => {
     const snippet =
 `<iframe
-  title="Winter Classic 2028 — Top Host City Preview"
-  src="YOUR_EMBED_URL_HERE"
+  title="Winter Classic 2028 — Top Host Cities"
+  src="https://gauthambc.github.io/Winter_classic_2028/top10.html"
   width="100%"
   height="900"
   scrolling="no"
