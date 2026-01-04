@@ -201,6 +201,41 @@
   }
 
   .city-left{ display:flex;align-items:center;gap:12px;min-width:0; }
+
+  /* Rank medals */
+  .rank-medal{
+    width: 30px; height: 30px;
+    border-radius: 999px;
+    display:grid;
+    place-items:center;
+    font-weight: 1100;
+    font-size: 12px;
+    color: #061225;
+    border: 1px solid rgba(255,255,255,.22);
+    box-shadow: 0 10px 22px rgba(0,0,0,.22);
+    position: relative;
+    flex: 0 0 auto;
+  }
+  .rank-medal::after{
+    content:"";
+    position:absolute;
+    bottom:-9px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+    border-top:10px solid #c73434; /* ribbon */
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,.25));
+  }
+  .rank-1{ background: radial-gradient(120% 140% at 30% 20%, #fff3b0 0%, #e6b800 62%, #b98a00 100%); }
+  .rank-2{ background: radial-gradient(120% 140% at 30% 20%, #ffffff 0%, #cdd5df 64%, #9aa6b4 100%); }
+  .rank-3{ background: radial-gradient(120% 140% at 30% 20%, #ffd7bf 0%, #c07a3a 62%, #8a4b1f 100%); }
+  .rank-rest{
+    background: radial-gradient(120% 140% at 30% 20%, #f7fbff 0%, #b7c8dd 66%, #7f99b6 100%);
+    color:#061225;
+  }
+
   .flag{
     width: 42px; height: 42px;
     border-radius: 14px;
@@ -240,7 +275,32 @@
   .city-score{
     text-align:right;
     flex:0 0 auto;
-    min-width: 74px;
+    min-width: 88px;
+  }
+  .city-score-top{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap: 6px;
+  }
+  .snow-ico{
+    width: 18px; height: 18px;
+    border-radius: 9px;
+    display:grid;
+    place-items:center;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.08);
+    box-shadow: 0 10px 18px rgba(0,0,0,.14);
+    flex: 0 0 auto;
+  }
+  .snow-ico svg{
+    width: 12px; height: 12px;
+    stroke: rgba(255,255,255,.96);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: .98;
   }
   .city-score .lbl{ font-size: 11px; opacity:.88; font-weight: 900; }
   .city-score .num{ font-size: 18px; font-weight: 1000; font-variant-numeric: tabular-nums; }
@@ -295,7 +355,6 @@
     filter: saturate(1.05) contrast(1.03);
   }
 
-  /* ✅ Bring back the blue hero overlay (like before) */
   .hero .overlay{
     position:absolute; inset:0;
     background:
@@ -316,7 +375,6 @@
     z-index: 2;
   }
 
-  /* ✅ Blue gradient ONLY behind the top UI */
   .hero-top::before{
     content:"";
     position:absolute;
@@ -338,55 +396,50 @@
     padding: 10px 12px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.22);
-
-    /* subtle blue glass */
     background:
       radial-gradient(120% 160% at 10% 0%, rgba(77,130,210,.22) 0%, transparent 58%),
       linear-gradient(180deg, rgba(6,18,37,.45), rgba(6,18,37,.26));
-
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
     box-shadow: 0 16px 34px rgba(0,0,0,.18);
-
-    /* allow longer names without ellipsis */
     max-width: calc(100% - 248px);
-    overflow:hidden; /* keeps it clean if someone adds super long text */
+    overflow:hidden;
+    min-width: 0;
   }
 
-  /* ✅ reduce text size slightly + allow wrapping so we don’t ellipsize */
+  /* City name: ALWAYS one line (no wrap, no ellipsis). JS will shrink if needed */
   .hero-city .city-txt{
     font-size: clamp(16px, 2.2vw, 23px);
     font-weight: 1100;
     letter-spacing: .2px;
     color:#fff;
     line-height:1.12;
-    white-space: normal;
-    overflow: visible;
+
+    white-space: nowrap;
+    word-break: normal;
+    overflow: hidden;
     text-overflow: clip;
-    word-break: break-word;
+    display: block;
+    width: 100%;
+    min-width: 0;
+
     text-shadow: 0 10px 26px rgba(0,0,0,.35);
   }
 
   /* Score panel (top-right) */
   .hero-score{
     flex: 0 0 auto;
-
     width: 236px;
     max-width: 46%;
     padding: 10px 12px 10px;
     border-radius: 16px;
     border: 1px solid rgba(255,255,255,.20);
-
-    /* ✅ bring back the “Action blue” gradient feel */
     background:
       radial-gradient(120% 160% at 18% 0%, rgba(77,130,210,.32) 0%, transparent 58%),
       linear-gradient(135deg, rgba(11,39,77,.78) 0%, rgba(11,71,140,.52) 52%, rgba(8,94,186,.36) 100%);
-
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
     box-shadow: 0 16px 34px rgba(0,0,0,.18);
-
-    /* ✅ prevents any internal “bleed” */
     overflow:hidden;
     contain: content;
   }
@@ -416,6 +469,8 @@
     stroke-linejoin:round;
     opacity:.98;
   }
+
+  /* Kicker: NO ellipsis. JS will shrink if needed */
   .hero-score .kicker{
     color: rgba(255,255,255,.92);
     font-size: 12px;
@@ -424,9 +479,11 @@
     line-height: 1.1;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: clip;
     min-width: 0;
+    flex: 1 1 auto;
   }
+
   .hero-score .big{
     margin-top: 6px;
     color:#fff;
@@ -715,7 +772,7 @@
       scroll-snap-type: x mandatory;
       height: auto;
     }
-    .city-btn{ min-width: 320px; scroll-snap-align: start; }
+    .city-btn{ min-width: 340px; scroll-snap-align: start; }
     .board{ height: auto; }
   }
 
@@ -769,73 +826,8 @@
         </div>
       </div>
 
-      <aside class="rail" aria-label="City selector">
-        <button class="city-btn" type="button" data-city="Chicago" aria-pressed="true">
-          <span class="city-left">
-            <span class="flag" aria-hidden="true">
-              <img alt="Illinois flag" loading="lazy" decoding="async"
-                   src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Illinois.svg">
-            </span>
-            <span style="min-width:0">
-              <div class="city-name">Chicago</div>
-              <div class="city-meta">
-                <span class="meta-chip" title="State / Country">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.1 7-11a7 7 0 0 0-14 0c0 5.9 7 11 7 11Z"/><path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z"/></svg>
-                  IL • USA
-                </span>
-              </div>
-            </span>
-          </span>
-          <span class="city-score">
-            <div class="lbl">Score</div>
-            <div class="num">66.02</div>
-          </span>
-        </button>
-
-        <button class="city-btn" type="button" data-city="Dallas" aria-pressed="false">
-          <span class="city-left">
-            <span class="flag" aria-hidden="true">
-              <img alt="Texas flag" loading="lazy" decoding="async"
-                   src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Texas.svg">
-            </span>
-            <span style="min-width:0">
-              <div class="city-name">Dallas</div>
-              <div class="city-meta">
-                <span class="meta-chip" title="State / Country">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.1 7-11a7 7 0 0 0-14 0c0 5.9 7 11 7 11Z"/><path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z"/></svg>
-                  TX • USA
-                </span>
-              </div>
-            </span>
-          </span>
-          <span class="city-score">
-            <div class="lbl">Score</div>
-            <div class="num">63.35</div>
-          </span>
-        </button>
-
-        <button class="city-btn" type="button" data-city="Los Angeles" aria-pressed="false">
-          <span class="city-left">
-            <span class="flag" aria-hidden="true">
-              <img alt="California flag" loading="lazy" decoding="async"
-                   src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_California.svg">
-            </span>
-            <span style="min-width:0">
-              <div class="city-name">Los Angeles</div>
-              <div class="city-meta">
-                <span class="meta-chip" title="State / Country">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-5.1 7-11a7 7 0 0 0-14 0c0 5.9 7 11 7 11Z"/><path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z"/></svg>
-                  CA • USA
-                </span>
-              </div>
-            </span>
-          </span>
-          <span class="city-score">
-            <div class="lbl">Score</div>
-            <div class="num">59.16</div>
-          </span>
-        </button>
-      </aside>
+      <!-- ✅ rail is generated by JS for Top 10 -->
+      <aside class="rail" id="rail" aria-label="City selector"></aside>
 
       <main class="board" aria-live="polite">
         <div class="board-inner">
@@ -888,7 +880,7 @@
             <div class="mBottom" style="margin-top:0;">
               <div class="wBadge" id="tempWeight">15%</div>
               <div class="wBar" aria-label="Weight bar">
-                <div class="wFill" style="width:15%;"></div>
+                <div class="wFill" id="tempFill" style="width:15%;"></div>
               </div>
             </div>
           </section>
@@ -908,26 +900,92 @@
   </footer>
 
 <script>
-  const CITIES = {
-    "Chicago": {
-      score: 66.02,
+  /* ✅ Snowflake used in ALL top city cards (rail) */
+  const SNOW_SVG = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2v20"/>
+      <path d="M5 5l14 14"/>
+      <path d="M19 5L5 19"/>
+      <path d="M4 12h16"/>
+    </svg>
+  `;
+
+  /* ✅ Top 10 from your CSV + ONLY city images (Wikimedia Commons) */
+  const CITY_ROWS = [
+    {
+      rank: 1, city: "Chicago", state: "IL", country: "USA", score: 66.02,
       heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Chicago_Skyline_At_Sunset_United_States_Cityscape_Photography_(112263307).jpeg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Illinois.svg",
       desc: "Classic hockey market + elite access. Strong stadium options and a deep fan base make Chicago the front-runner.",
       values: { access: 26113502, temp: 25.6, capacity: 61500, hotels: 103, fans: 2500000 }
     },
-    "Dallas": {
-      score: 63.35,
+    {
+      rank: 2, city: "Dallas", state: "TX", country: "USA", score: 63.35,
       heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Dallas_Skyline_at_Dusk.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Texas.svg",
       desc: "Stadium scale + airport connectivity keep Dallas near the top — a big-event market with proven outdoor success.",
       values: { access: 30694774, temp: 47.2, capacity: 92100, hotels: 52, fans: 500000 }
     },
-    "Los Angeles": {
-      score: 59.16,
+    {
+      rank: 3, city: "Los Angeles", state: "CA", country: "USA", score: 59.16,
       heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Bunker_Hill_Downtown_Los_Angeles.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_California.svg",
       desc: "TV-first Winter Classic potential: iconic venues, massive reach, and high travel demand.",
       values: { access: 21874207, temp: 57.2, capacity: 89702, hotels: 54, fans: 882000 }
+    },
+    {
+      rank: 4, city: "Denver", state: "CO", country: "USA", score: 58.57,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Full_Denver_skyline.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Colorado.svg",
+      desc: "A strong sports city with big-venue options and excellent airport access — plus a true winter backdrop.",
+      values: { access: 29529451, temp: 30.7, capacity: 76125, hotels: 78, fans: 773000 }
+    },
+    {
+      rank: 5, city: "Anaheim", state: "CA", country: "USA", score: 55.28,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Anaheimcityhall.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_California.svg",
+      desc: "West Coast staging with major-market reach, strong venue flexibility, and steady travel demand.",
+      values: { access: 21874207, temp: 57.0, capacity: 89702, hotels: 54, fans: 403000 }
+    },
+    {
+      rank: 6, city: "Seattle", state: "WA", country: "USA", score: 52.97,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Seattle_skyline_2021.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Washington.svg",
+      desc: "Scenic setting and a passionate fan culture, backed by strong travel connectivity and event-ready venues.",
+      values: { access: 17997233, temp: 41.8, capacity: 68740, hotels: 210, fans: 230000 }
+    },
+    {
+      rank: 7, city: "Detroit", state: "MI", country: "USA", score: 52.94,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Detroit_Skyline.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Michigan.svg",
+      desc: "Hockey heartland with deep fan roots and major stadium options — a natural fit for an outdoor showcase.",
+      values: { access: 11787777, temp: 25.6, capacity: 107601, hotels: 55, fans: 1800000 }
+    },
+    {
+      rank: 8, city: "Las Vegas", state: "NV", country: "USA", score: 50.26,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Las_Vegas_skyline_2014.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Nevada.svg",
+      desc: "Destination-event machine: unmatched hotels and flight volume with a marquee skyline for broadcast.",
+      values: { access: 19600869, temp: 48.9, capacity: 65000, hotels: 121, fans: 420000 }
+    },
+    {
+      rank: 9, city: "New York City", state: "NY", country: "USA", score: 46.77,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Skyline-New-York-City.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_New_York.svg",
+      desc: "The biggest stage: massive reach and fanbase with iconic visuals and venue possibilities.",
+      values: { access: 12090274, temp: 33.7, capacity: 82500, hotels: 66, fans: 1400000 }
+    },
+    {
+      rank: 10, city: "Boston", state: "MA", country: "USA", score: 45.03,
+      heroImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Boston_skyline_from_South_Boston_November_2015.jpg",
+      flagImg: "https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_Massachusetts.svg",
+      desc: "Original Six energy with a huge hockey following — compact logistics and a classic winter vibe.",
+      values: { access: 13559018, temp: 30.0, capacity: 65000, hotels: 15, fans: 2100000 }
     }
-  };
+  ];
+
+  const CITIES = {};
+  CITY_ROWS.forEach(r => (CITIES[r.city] = r));
 
   const TEMP_METRIC = {
     key:"temp",
@@ -939,13 +997,15 @@
   };
 
   const METRICS = [
-    { key:"access",   title:"Airport & Travel",   weight:30, value:(c)=> c.values.access,   fmt:(n)=> n.toLocaleString(), unit:"pax",    icon: planeIcon() },
-    { key:"capacity", title:"Stadium Capacity",   weight:20, value:(c)=> c.values.capacity, fmt:(n)=> n.toLocaleString(),  unit:"Seats",  icon: stadiumIcon() },
-    { key:"hotels",   title:"Hotel Availability", weight:15, value:(c)=> c.values.hotels,   fmt:(n)=> n.toLocaleString(),  unit:"Hotels", icon: hotelIcon() },
-    { key:"fans",     title:"Hockey Fan Base",    weight:20, value:(c)=> c.values.fans,     fmt:(n)=> n.toLocaleString(),  unit:"Fans",   icon: fansIcon() },
+    { key:"access",   title:"Airport & Travel",          weight:30, value:(c)=> c.values.access,   fmt:(n)=> n.toLocaleString(), unit:"pax",   icon: planeIcon() },
+    { key:"capacity", title:"Largest Stadium Capacity",  weight:20, value:(c)=> c.values.capacity, fmt:(n)=> n.toLocaleString(),  unit:"Seats", icon: stadiumIcon() },
+    { key:"hotels",   title:"Hotel Availability",        weight:15, value:(c)=> c.values.hotels,   fmt:(n)=> n.toLocaleString(),  unit:"Hotels",icon: hotelIcon() },
+    { key:"fans",     title:"Hockey Fan Base",           weight:20, value:(c)=> c.values.fans,     fmt:(n)=> n.toLocaleString(),  unit:"Fans",  icon: fansIcon() },
   ];
 
   const root            = document.querySelector(".action-wc");
+  const railEl          = document.getElementById("rail");
+
   const heroTitle       = document.getElementById("heroTitle");
   const heroImg         = document.getElementById("heroImg");
 
@@ -957,18 +1017,86 @@
   const tempBig         = document.getElementById("tempBig");
   const tempSub         = document.getElementById("tempSub");
   const tempWeight      = document.getElementById("tempWeight");
+  const tempFill        = document.getElementById("tempFill");
 
   const desc            = document.getElementById("desc");
   const metricsEl       = document.getElementById("metrics");
+
+  /* ✅ Shrink-to-fit helpers (keeps ONE line without wrapping or ellipsis) */
+  function fitTextToOneLine(el, minPx = 12){
+    if(!el) return;
+    el.style.fontSize = "";
+    el.style.whiteSpace = "nowrap";
+
+    const maxPx = parseFloat(getComputedStyle(el).fontSize) || 16;
+    let size = maxPx;
+
+    while(size > minPx && el.scrollWidth > el.clientWidth + 1){
+      size -= 0.5;
+      el.style.fontSize = size + "px";
+    }
+  }
+
+  function fitHeroTexts(){
+    fitTextToOneLine(heroTitle, 13);
+    fitTextToOneLine(heroScoreKicker, 10);
+  }
+
+  function medalClass(rank){
+    if(rank === 1) return "rank-1";
+    if(rank === 2) return "rank-2";
+    if(rank === 3) return "rank-3";
+    return "rank-rest";
+  }
+
+  function buildRail(){
+    railEl.innerHTML = CITY_ROWS.map((r, i) => `
+      <button class="city-btn" type="button" data-city="${escapeHtml(r.city)}" aria-pressed="${i===0 ? "true":"false"}">
+        <span class="city-left">
+          <span class="rank-medal ${medalClass(r.rank)}" aria-label="Rank ${r.rank}">
+            ${r.rank}
+          </span>
+
+          <span class="flag" aria-hidden="true">
+            <img alt="${escapeHtml(r.state)} flag" loading="lazy" decoding="async" src="${r.flagImg}">
+          </span>
+
+          <span style="min-width:0">
+            <div class="city-name">${escapeHtml(r.city)}</div>
+            <div class="city-meta">
+              <span class="meta-chip" title="State / Country">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 21s7-5.1 7-11a7 7 0 0 0-14 0c0 5.9 7 11 7 11Z"/>
+                  <path d="M12 10.5a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z"/>
+                </svg>
+                ${escapeHtml(r.state)} • ${escapeHtml(r.country)}
+              </span>
+            </div>
+          </span>
+        </span>
+
+        <span class="city-score">
+          <div class="city-score-top">
+            <span class="snow-ico" aria-hidden="true" title="Winter Classic">
+              ${SNOW_SVG}
+            </span>
+            <div class="lbl">Score</div>
+          </div>
+          <div class="num">${r.score.toFixed(2)}</div>
+        </span>
+      </button>
+    `).join("");
+  }
 
   function render(cityName){
     const d = CITIES[cityName];
     if(!d) return;
 
-    heroTitle.textContent = cityName;
+    heroTitle.textContent = d.city;
 
+    // ✅ City-only images (Wikimedia)
     heroImg.src = d.heroImg;
-    heroImg.alt = `${cityName} skyline`;
+    heroImg.alt = `${d.city} city view`;
     heroImg.onerror = () => heroImg.removeAttribute("src");
 
     heroScoreKicker.textContent = "Winter Classic Score";
@@ -979,19 +1107,20 @@
     tempBig.textContent = TEMP_METRIC.fmt(TEMP_METRIC.value(d));
     tempSub.textContent = `Avg Jan temp • weight ${TEMP_METRIC.weight}%`;
     tempWeight.textContent = `${TEMP_METRIC.weight}%`;
+    tempFill.style.width = `${TEMP_METRIC.weight}%`;
 
     desc.textContent = d.desc;
 
     metricsEl.innerHTML = METRICS.map(m => {
       const raw = m.value(d);
       return `
-        <div class="mcard" role="group" aria-label="${m.title}">
+        <div class="mcard" role="group" aria-label="${escapeHtml(m.title)}">
           <div>
-            <h4 class="mTitle">${m.title}</h4>
-            <div class="mValue">${m.fmt(raw)} <small>${m.unit}</small></div>
+            <h4 class="mTitle">${escapeHtml(m.title)}</h4>
+            <div class="mValue">${m.fmt(raw)} <small>${escapeHtml(m.unit)}</small></div>
           </div>
 
-          <div class="mIcon" aria-hidden="true" title="${m.title}">
+          <div class="mIcon" aria-hidden="true" title="${escapeHtml(m.title)}">
             ${m.icon}
           </div>
 
@@ -1004,22 +1133,26 @@
         </div>
       `;
     }).join("");
+
+    requestAnimationFrame(fitHeroTexts);
   }
 
-  const btns = Array.from(document.querySelectorAll(".city-btn"));
-  btns.forEach(b => {
-    b.addEventListener("click", () => {
-      btns.forEach(x => x.setAttribute("aria-pressed","false"));
-      b.setAttribute("aria-pressed","true");
-      render(b.dataset.city);
+  function wireRail(){
+    const btns = Array.from(document.querySelectorAll(".city-btn"));
+    btns.forEach(b => {
+      b.addEventListener("click", () => {
+        btns.forEach(x => x.setAttribute("aria-pressed","false"));
+        b.setAttribute("aria-pressed","true");
+        render(b.dataset.city);
+      });
+      b.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          b.click();
+        }
+      });
     });
-    b.addEventListener("keydown", (e) => {
-      if(e.key === "Enter" || e.key === " "){
-        e.preventDefault();
-        b.click();
-      }
-    });
-  });
+  }
 
   const copyBtn = document.getElementById("copyBtn");
   copyBtn.addEventListener("click", async () => {
@@ -1045,11 +1178,18 @@
   const ro = new ResizeObserver(entries => {
     const rect = entries[0].contentRect;
     root.classList.toggle("compact", rect.height < 920);
+    requestAnimationFrame(fitHeroTexts);
   });
   ro.observe(root);
 
-  render("Chicago");
+  window.addEventListener("resize", () => requestAnimationFrame(fitHeroTexts));
 
+  // ✅ build + init
+  buildRail();
+  wireRail();
+  render(CITY_ROWS[0].city);
+
+  // swipe hint
   (() => {
     const rail = document.querySelector(".rail");
     const swipeText = document.getElementById("swipeText");
@@ -1085,6 +1225,12 @@
     requestAnimationFrame(update);
     setTimeout(update, 250);
   })();
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
 
   function planeIcon(){ return `<svg viewBox="0 0 24 24"><path d="M2 16l20-6-20-6 5 6-5 6Z"/><path d="M7 12h15"/></svg>`; }
   function stadiumIcon(){ return `<svg viewBox="0 0 24 24"><path d="M3 20V10l9-6 9 6v10"/><path d="M7 20v-6h10v6"/><path d="M9 11h6"/></svg>`; }
