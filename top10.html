@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Winter Classic 2028 — Top Host Cities (Action)</title>
+  <title>Winter Classic 2028 — Top Host City Preview (Action)</title>
 
   <link rel="preconnect" href="https://commons.wikimedia.org">
   <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
@@ -104,13 +104,15 @@
     filter: brightness(0) invert(1);
     opacity:.98;
   }
-  .brand strong{ font-weight: 1000; font-size: 12px; }
 
   /* Body */
   .wrap{
     flex: 1 1 auto;
     min-height:0;
-    padding: 14px 14px 10px;
+
+    /* ✅ tighter padding to reduce vertical scroll on desktop embeds */
+    padding: 10px 14px 8px;
+
     overflow:auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -246,7 +248,7 @@
     box-shadow: 0 10px 22px rgba(0,0,0,.22);
   }
 
-  /* ✅ default = cover (keeps your current look) */
+  /* default */
   .flag img{
     width:100%;
     height:100%;
@@ -254,7 +256,7 @@
     display:block;
   }
 
-  /* ✅ only for flags that need the emblem visible (Las Vegas / Nevada) */
+  /* ✅ emblem-safe (Nevada) */
   .flag.fit-contain img{
     object-fit: contain;
     object-position: center;
@@ -421,7 +423,6 @@
     min-width: 0;
   }
 
-  /* City name: ALWAYS one line (no wrap, no ellipsis). JS will shrink if needed */
   .hero-city .city-txt{
     font-size: clamp(16px, 2.2vw, 23px);
     font-weight: 1100;
@@ -484,7 +485,6 @@
     opacity:.98;
   }
 
-  /* Kicker: NO ellipsis. JS will shrink if needed */
   .hero-score .kicker{
     color: rgba(255,255,255,.92);
     font-size: 12px;
@@ -573,7 +573,7 @@
     color: var(--muted);
   }
 
-  /* ✅ FIXED + vertically centered desc box (same for all 10 cities) */
+  /* ✅ FIXED + vertically centered desc box */
   .desc{
     grid-column: 1 / -1;
     border-radius: 18px;
@@ -584,15 +584,15 @@
     font-size: clamp(12px, 1.5vw, 14px);
     font-weight: 780;
 
-    height: 74px;        /* fixed height */
+    height: 74px;
     display: flex;
-    align-items: center; /* ✅ vertical middle */
+    align-items: center;
   }
   .desc .desc-txt{
     width: 100%;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;  /* clamp to 2 lines */
+    -webkit-line-clamp: 2;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.25;
@@ -738,41 +738,51 @@
   }
   .copy-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.18); }
 
-  /* Hint row */
+  /* Hint row (slimmer + less vertical space) */
   .hint-row{
     display:none;
     align-items:center;
     justify-content:center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    padding: 2px 0;
+
+    /* ✅ reduce space above/below */
+    padding: 0;
+    margin: 0 0 6px;
   }
+
   .hint-pill{
     display:inline-flex;
     align-items:center;
-    gap: 8px;
-    padding: 7px 10px;
+    gap: 7px;
+
+    /* ✅ slimmer pill */
+    padding: 6px 9px;
+
     border-radius: 999px;
     border: 1px solid rgba(255,255,255,.18);
     background: rgba(255,255,255,.07);
     color:#fff;
     box-shadow: var(--shadow2);
     font-weight: 950;
-    font-size: 12px;
-    letter-spacing: .15px;
+
+    /* ✅ slightly smaller text */
+    font-size: 11px;
+
+    letter-spacing: .12px;
     line-height: 1;
     user-select:none;
     white-space: nowrap;
   }
   .hint-pill .dot{
-    width:8px; height:8px;
+    width:7px; height:7px;
     border-radius:999px;
     background: linear-gradient(180deg, var(--b4), var(--b5));
     box-shadow: 0 10px 20px rgba(0,0,0,.18);
     flex:0 0 auto;
   }
   .hint-pill .mini-ico{
-    width:18px;height:18px;
+    width:16px;height:16px;
     display:grid;place-items:center;
     border-radius:999px;
     border:1px solid rgba(255,255,255,.18);
@@ -780,7 +790,7 @@
     flex:0 0 auto;
   }
   .hint-pill .mini-ico svg{
-    width:12px;height:12px;
+    width:11px;height:11px;
     stroke: rgba(255,255,255,.92);
     fill:none;
     stroke-width:2;
@@ -832,7 +842,7 @@
 
   <header class="head">
     <div class="head-top">
-      <h3 class="title" id="wc-title">Winter Classic 2028 — Top Host Cities</h3>
+      <h3 class="title" id="wc-title">Winter Classic 2028 — Top Host City Preview</h3>
 
       <div class="brand" aria-label="Brand">
         <img alt="Action logo" src="https://i.postimg.cc/x1nG117r/AN-final2-logo.png">
@@ -916,7 +926,6 @@
             </div>
           </section>
 
-          <!-- ✅ UPDATED: wrapper span so we can clamp AND vertically center -->
           <div class="desc" id="desc"><span class="desc-txt"></span></div>
 
           <div class="metrics" id="metrics"></div>
@@ -933,7 +942,6 @@
   </footer>
 
 <script>
-  /* ✅ Snowflake used in ALL top city cards (rail) */
   const SNOW_SVG = `
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M12 2v20"/>
@@ -943,7 +951,6 @@
     </svg>
   `;
 
-  /* ✅ Top 10 + city-only images (Wikimedia Commons) */
   const CITY_ROWS = [
     {
       rank: 1, city: "Chicago", state: "IL", country: "USA", score: 66.02,
@@ -1056,7 +1063,6 @@
   const descTxt         = desc.querySelector(".desc-txt");
   const metricsEl       = document.getElementById("metrics");
 
-  /* ✅ Shrink-to-fit helpers (keeps ONE line without wrapping or ellipsis) */
   function fitTextToOneLine(el, minPx = 12){
     if(!el) return;
     el.style.fontSize = "";
@@ -1091,7 +1097,6 @@
             ${r.rank}
           </span>
 
-          <!-- ✅ Las Vegas uses contain so the Nevada emblem isn't cropped -->
           <span class="flag ${r.city === "Las Vegas" ? "fit-contain" : ""}" aria-hidden="true">
             <img alt="${escapeHtml(r.state)} flag" loading="lazy" decoding="async" src="${r.flagImg}">
           </span>
@@ -1143,7 +1148,6 @@
     tempWeight.textContent = `${TEMP_METRIC.weight}%`;
     tempFill.style.width = `${TEMP_METRIC.weight}%`;
 
-    /* ✅ UPDATED: write into inner span so clamp + vertical centering works */
     descTxt.textContent = d.desc;
 
     metricsEl.innerHTML = METRICS.map(m => {
@@ -1193,8 +1197,8 @@
   copyBtn.addEventListener("click", async () => {
     const snippet =
 `<iframe
-  title="Winter Classic 2028 — Top Host Cities"
-  src="https://gauthambc.github.io/Winter_classic_2028/top10.html"
+  title="Winter Classic 2028 — Top Host City Preview"
+  src="YOUR_EMBED_URL_HERE"
   width="100%"
   height="900"
   scrolling="no"
@@ -1219,7 +1223,6 @@
 
   window.addEventListener("resize", () => requestAnimationFrame(fitHeroTexts));
 
-  // ✅ build + init
   buildRail();
   wireRail();
   render(CITY_ROWS[0].city);
