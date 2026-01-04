@@ -559,6 +559,7 @@
     color: var(--muted);
   }
 
+  /* ✅ FIXED + vertically centered desc box (same for all 10 cities) */
   .desc{
     grid-column: 1 / -1;
     border-radius: 18px;
@@ -568,6 +569,23 @@
     color: #1f2a3b;
     font-size: clamp(12px, 1.5vw, 14px);
     font-weight: 780;
+
+    height: 74px;        /* fixed height */
+    display: flex;
+    align-items: center; /* ✅ vertical middle */
+  }
+  .desc .desc-txt{
+    width: 100%;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;  /* clamp to 2 lines */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+  }
+  @media (max-width: 560px){
+    .desc{ height: 84px; }
+    .desc .desc-txt{ -webkit-line-clamp: 3; }
   }
 
   .metrics{
@@ -803,8 +821,7 @@
       <h3 class="title" id="wc-title">Winter Classic 2028 — Top Host City Preview</h3>
 
       <div class="brand" aria-label="Brand">
-        <img alt="Action logo" src="https://via.placeholder.com/140x40.png?text=Action+Logo">
-        <strong>Action</strong>
+        <img alt="Action logo" src="https://i.postimg.cc/x1nG117r/AN-final2-logo.png">
       </div>
     </div>
   </header>
@@ -885,7 +902,9 @@
             </div>
           </section>
 
-          <div class="desc" id="desc"></div>
+          <!-- ✅ UPDATED: wrapper span so we can clamp AND vertically center -->
+          <div class="desc" id="desc"><span class="desc-txt"></span></div>
+
           <div class="metrics" id="metrics"></div>
 
         </div>
@@ -910,7 +929,7 @@
     </svg>
   `;
 
-  /* ✅ Top 10 from your CSV + ONLY city images (Wikimedia Commons) */
+  /* ✅ Top 10 + city-only images (Wikimedia Commons) */
   const CITY_ROWS = [
     {
       rank: 1, city: "Chicago", state: "IL", country: "USA", score: 66.02,
@@ -1020,6 +1039,7 @@
   const tempFill        = document.getElementById("tempFill");
 
   const desc            = document.getElementById("desc");
+  const descTxt         = desc.querySelector(".desc-txt");
   const metricsEl       = document.getElementById("metrics");
 
   /* ✅ Shrink-to-fit helpers (keeps ONE line without wrapping or ellipsis) */
@@ -1094,7 +1114,6 @@
 
     heroTitle.textContent = d.city;
 
-    // ✅ City-only images (Wikimedia)
     heroImg.src = d.heroImg;
     heroImg.alt = `${d.city} city view`;
     heroImg.onerror = () => heroImg.removeAttribute("src");
@@ -1109,7 +1128,8 @@
     tempWeight.textContent = `${TEMP_METRIC.weight}%`;
     tempFill.style.width = `${TEMP_METRIC.weight}%`;
 
-    desc.textContent = d.desc;
+    /* ✅ UPDATED: write into inner span so clamp + vertical centering works */
+    descTxt.textContent = d.desc;
 
     metricsEl.innerHTML = METRICS.map(m => {
       const raw = m.value(d);
