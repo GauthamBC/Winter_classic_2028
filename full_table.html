@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Winter Classic — Host City Scoreboard</title>
+</head>
+<body style="margin:0;">
+
+<section class="vi-table-embed brand-actionnetwork footer-center align-center" style="width:100%;max-width:100%;margin:0;
+         font:14px/1.35 Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         color:#181a1f;background:#ffffff;border:1px solid #DCEFE6;border-radius:12px;
+         box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.09);">
+
+  <style>
+    .vi-table-embed, .vi-table-embed * { box-sizing:border-box; font-family:inherit; }
+
+    .vi-table-embed{
+      --brand-50:#F6FFF9; 
+      --brand-100:#DCF2EB;
+      --brand-300:#BCE5D6;
+      --brand-500:#56C257; 
+      --brand-600:#3FA94B; 
+      --brand-700:#2E8538; 
+      --brand-900:#1F5D28;
+
+      --header-bg:var(--brand-500);
+      --stripe:var(--brand-100);
+      --hover:var(--brand-300);
+      --scroll-thumb:var(--brand-500);
+      --footer-border:color-mix(in oklab,var(--brand-500) 35%, transparent);
+
+      --cell-align:center;
+    }
+    .vi-table-embed.align-left { --cell-align:left; }
+    .vi-table-embed.align-center { --cell-align:center; }
+    .vi-table-embed.align-right { --cell-align:right; }
+
+    .vi-table-embed.brand-vegasinsider{
+      --brand-50:#FFF7DC;
+      --brand-100:#FFE8AA;
+      --brand-300:#FFE8AA;
+      --brand-500:#F2C23A;
+      --brand-600:#D9A72A;
+      --brand-700:#B9851A;
+      --brand-900:#111111;
+      --header-bg:var(--brand-500);
+      --stripe:var(--brand-50);
+      --hover:var(--brand-100);
+      --scroll-thumb:var(--brand-600);
+      --footer-border:color-mix(in oklab,var(--brand-500) 40%, transparent);
+    }
+
+    .vi-table-embed.brand-canadasb{
+      --brand-50:#FEF2F2;
+      --brand-100:#FEE2E2;
+      --brand-300:#FECACA;
+      --brand-500:#EF4444;
+      --brand-600:#DC2626;
+      --brand-700:#B91C1C;
+      --brand-900:#7F1D1D;
+      --header-bg:var(--brand-600);
+      --stripe:var(--brand-50);
+      --hover:var(--brand-100);
+      --scroll-thumb:var(--brand-600);
+      --footer-border:color-mix(in oklab,var(--brand-600) 40%, transparent);
+    }
+
+    .vi-table-embed.brand-rotogrinders{
+      --brand-50:#E8F1FF;
+      --brand-100:#D3E3FF;
+      --brand-300:#9ABCF9;
+      --brand-500:#2F7DF3;
+      --brand-600:#0159D1;
+      --brand-700:#0141A1;
+      --brand-900:#011F54;
+      --header-bg:var(--brand-700);
+      --stripe:var(--brand-50);
+      --hover:var(--brand-100);
+      --scroll-thumb:var(--brand-600);
+      --footer-border:color-mix(in oklab,var(--brand-600) 40%, transparent);
+    }
+
+    /* Header block */
+    .vi-table-embed .vi-table-header{
+      padding:10px 16px 8px;
+      border-bottom:1px solid var(--brand-100);
+      background:linear-gradient(90deg,var(--brand-50),#ffffff);
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:2px;
+    }
+    .vi-table-embed .vi-table-header.centered{ align-items:center; text-align:center; }
+    .vi-table-embed .vi-table-header .title{
+      margin:0; font-size:clamp(18px,2.3vw,22px); font-weight:750; color:#111827; display:block;
+    }
+    .vi-table-embed .vi-table-header .title.branded{ color:var(--brand-600); }
+    .vi-table-embed .vi-table-header .subtitle{ margin:0; font-size:13px; color:#6b7280; display:block; }
+
+    /* Table block */
+    #bt-block, #bt-block * { box-sizing:border-box; }
+    #bt-block{
+      --bg:#ffffff; --text:#1f2937;
+      --gutter: 14px;
+      --table-max-h: 720px;
+      --vbar-w: 6px; --vbar-w-hover: 8px;
+      padding: 10px var(--gutter);
+      padding-top: 10px;
+    }
+
+    #bt-block .dw-controls{
+      display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center;
+      gap:12px; margin:4px 0 10px 0;
+    }
+    #bt-block .left{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start}
+    #bt-block .right{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+
+    #bt-block .dw-field{position:relative}
+    #bt-block .dw-input,#bt-block .dw-select,#bt-block .dw-btn{
+      font:14px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; border-radius:10px; padding:8px 10px; transition:.15s ease;
+    }
+    #bt-block .dw-input,#bt-block .dw-select{
+      background:#fff;
+      border:1px solid var(--brand-700);
+      color:var(--text); box-shadow:inset 0 1px 2px rgba(16,24,40,.04);
+    }
+    #bt-block .dw-input{width:min(320px,100%); padding-right:36px}
+    #bt-block .dw-input::placeholder{color:#9AA4B2}
+    #bt-block .dw-input:focus,#bt-block .dw-select:focus{
+      outline:none; border-color:var(--brand-500);
+      box-shadow:0 0 0 3px color-mix(in oklab,var(--brand-500) 25%,transparent); background:#fff;
+    }
+    #bt-block .dw-select{ appearance:none; -webkit-appearance:none; -moz-appearance:none; padding-right:26px; background:#fff; background-image:none; }
+
+    #bt-block .dw-btn{
+      background:var(--brand-500); color:#fff; border:1px solid var(--brand-500); padding-inline:12px; cursor:pointer
+    }
+    #bt-block .dw-btn:hover{background:var(--brand-600); border-color:var(--brand-600)}
+    #bt-block .dw-btn:active{transform:translateY(1px)}
+    #bt-block .dw-btn[disabled]{background:#fafafa; border-color:#d1d5db; color:#6b7280; opacity:1; cursor:not-allowed; transform:none}
+
+    /* Clear button */
+    #bt-block .dw-clear{
+      position:absolute; right:10px; top:50%; translate:0 -50%; width:22px; height:22px; border-radius:9999px; border:0;
+      background:transparent; color:var(--brand-700); cursor:pointer; display:none; align-items:center; justify-content:center;
+    }
+    #bt-block .dw-field.has-value .dw-clear{display:flex}
+    #bt-block .dw-clear:hover{background:var(--brand-100)}
+
+    /* Card & table */
+    #bt-block .dw-card { background: var(--bg); border: 0; box-shadow: none; overflow: hidden; margin: 0; width: 100%; }
+    #bt-block .dw-scroll { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+    #bt-block .dw-scroll.no-scroll { overflow-x: hidden !important; }
+
+    #bt-block table.dw-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      background: transparent;
+      min-width: 600px;
+      table-layout: auto;
+    }
+
+    /* Header row */
+    #bt-block thead th{
+      background:var(--header-bg); color:#ffffff; font-weight:700; vertical-align:middle; border:0;
+      padding:12px 14px; white-space:nowrap;
+      transition:background-color .15s, color .15s, box-shadow .15s, transform .05s;
+    }
+    #bt-block thead th.sortable{cursor:pointer; user-select:none}
+    #bt-block thead th.sortable::after{content:"↕"; font-size:12px; opacity:.75; margin-left:8px; color:#ffffff}
+    #bt-block thead th.sortable[data-sort="asc"]::after{content:"▲"}
+    #bt-block thead th.sortable[data-sort="desc"]::after{content:"▼"}
+    #bt-block thead th.sortable:hover,#bt-block thead th.sortable:focus-visible{background:var(--brand-600); color:#fff; box-shadow:inset 0 -3px 0 var(--brand-100)}
+    #bt-block .dw-scroll.scrolled thead th{box-shadow:0 6px 10px -6px rgba(0,0,0,.25)}
+    #bt-block thead th.is-sorted{background:var(--brand-700); color:#fff; box-shadow:inset 0 -3px 0 var(--brand-100)}
+
+    /* Alignment (applies to both th + td) */
+    #bt-block thead th,
+    #bt-block tbody td {
+      padding: 12px 10px;
+      overflow: hidden;
+      text-align: var(--cell-align, center);
+    }
+    #bt-block thead th { white-space: nowrap; }
+
+    /* Body rows zebra (injected) */
+    
+    #bt-block tbody tr:not(.dw-empty):nth-child(odd) td{background:var(--stripe);}
+    #bt-block tbody tr:not(.dw-empty):nth-child(even) td{background:#ffffff;}
+
+
+    /* Hover should win over stripes */
+    #bt-block tbody tr:hover td{ background:var(--hover) !important; }
+    #bt-block tbody tr:hover{
+      box-shadow:inset 3px 0 0 var(--brand-500);
+      transform:translateY(-1px);
+      transition:background-color .12s ease, box-shadow .12s ease, transform .08s ease;
+    }
+
+    #bt-block thead th{position:sticky; top:0; z-index:5}
+    #bt-block .dw-scroll{
+      max-height:var(--table-max-h,360px); overflow-y:auto;
+      -ms-overflow-style:auto; scrollbar-width:thin; scrollbar-color:var(--scroll-thumb) transparent
+    }
+    #bt-block .dw-scroll::-webkit-scrollbar:horizontal{height:0; display:none}
+    #bt-block .dw-scroll::-webkit-scrollbar:vertical{width:var(--vbar-w)}
+    #bt-block .dw-scroll:hover::-webkit-scrollbar:vertical{width:var(--vbar-w-hover)}
+    #bt-block .dw-scroll::-webkit-scrollbar-thumb{
+      background:var(--scroll-thumb); border-radius:9999px; border:2px solid transparent; background-clip:content-box;
+    }
+    #bt-block tr.dw-empty td{
+      text-align:center; color:#6b7280; font-style:italic; padding:18px 14px;
+      background:linear-gradient(0deg,#fff,var(--brand-50)) !important;
+    }
+
+    /* Footer */
+    .vi-table-embed .vi-footer {
+      display:block;
+      padding:10px 14px 8px;
+      border-top:1px solid var(--footer-border);
+      background:linear-gradient(90deg,var(--brand-50),#ffffff);
+    }
+    .vi-table-embed .footer-inner{
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      gap:12px;
+    }
+    .vi-table-embed.footer-center .footer-inner{ justify-content:center; }
+    .vi-table-embed.footer-left .footer-inner{ justify-content:flex-start; }
+    .vi-table-embed .vi-footer img{ height: 38px; width:auto; display:inline-block; }
+
+    /* Brand-specific logo recolor */
+    .vi-table-embed.brand-actionnetwork .vi-footer img{
+      filter: brightness(0) saturate(100%) invert(62%) sepia(23%) saturate(1250%) hue-rotate(78deg) brightness(96%) contrast(92%);
+    }
+    .vi-table-embed.brand-vegasinsider .vi-footer img{
+      filter: brightness(0) saturate(100%) invert(72%) sepia(63%) saturate(652%) hue-rotate(6deg) brightness(95%) contrast(101%);
+    }
+    .vi-table-embed.brand-canadasb .vi-footer img{
+      filter: brightness(0) saturate(100%) invert(32%) sepia(85%) saturate(2386%) hue-rotate(347deg) brightness(96%) contrast(104%);
+    }
+    .vi-table-embed.brand-rotogrinders .vi-footer img{
+      filter: brightness(0) saturate(100%) invert(23%) sepia(95%) saturate(1704%) hue-rotate(203deg) brightness(93%) contrast(96%);
+    }
+    .vi-table-embed.brand-vegasinsider .vi-footer img{ height:32px; }
+    .vi-table-embed.brand-rotogrinders .vi-footer img{ height:32px; }
+
+    .vi-hide{ display:none !important; }
+  </style>
+
+  <!-- Header (optional) -->
+  <div class="vi-table-header  ">
+    <span class="title branded">Winter Classic — Host City Scoreboard</span>
+    <span class="subtitle">Scores reflect a weighted model: Airport &amp; Travel (30%), Largest Stadium Capacity (20%), Hockey Fan Base (20%), January Temperature (15%), Hotel Availability (15%).</span>
+  </div>
+
+  <!-- Table block -->
+  <div id="bt-block" data-dw="table">
+    <div class="dw-controls ">
+      <div class="left">
+        <div class="dw-field ">
+          <input type="search" class="dw-input" placeholder="Search table…" aria-label="Search table">
+          <button type="button" class="dw-clear" aria-label="Clear search">×</button>
+        </div>
+      </div>
+
+      <div class="right ">
+        <label class="dw-status" for="bt-size" style="margin-right:4px;">Rows/page</label>
+        <select id="bt-size" class="dw-select">
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="0">All</option>
+        </select>
+        <button class="dw-btn" data-page="prev" aria-label="Previous page">‹</button>
+        <button class="dw-btn" data-page="next" aria-label="Next page">›</button>
+      </div>
+    </div>
+
+    <div class="dw-card">
+      <div class="dw-scroll">
+        <table class="dw-table">
+          <thead>
+            <tr>
+              <th scope="col" data-type="num">Rank</th>
+              <th scope="col" data-type="text">Location</th>
+              <th scope="col" data-type="num">Winter Classic Score</th>
+              <th scope="col" data-type="num">January Temperature</th>
+              <th scope="col" data-type="num">Airport &amp; Travel</th>
+              <th scope="col" data-type="num">Largest Stadium Capacity</th>
+              <th scope="col" data-type="num">Hotel Availability</th>
+              <th scope="col" data-type="num">Hockey Fan Base</th>
+            </tr>
+          </thead>
+          <tbody>
+                        <tr><td>1</td><td>Chicago, IL, USA</td><td>66.02</td><td>25.6°F</td><td>26113502.0</td><td>61500</td><td>103</td><td>2500000</td></tr>
+            <tr><td>2</td><td>Dallas, TX, USA</td><td>63.35</td><td>47.2°F</td><td>30694774.0</td><td>92100</td><td>52</td><td>500000</td></tr>
+            <tr><td>3</td><td>Los Angeles, CA, USA</td><td>59.16</td><td>57.2°F</td><td>21874207.0</td><td>89702</td><td>54</td><td>882000</td></tr>
+            <tr><td>4</td><td>Denver, CO, USA</td><td>58.57</td><td>30.7°F</td><td>29529451.0</td><td>76125</td><td>78</td><td>773000</td></tr>
+            <tr><td>5</td><td>Anaheim, CA, USA</td><td>55.28</td><td>57.0°F</td><td>21874207.0</td><td>89702</td><td>54</td><td>403000</td></tr>
+            <tr><td>6</td><td>Seattle, WA, USA</td><td>52.97</td><td>41.8°F</td><td>17997233.0</td><td>68740</td><td>210</td><td>230000</td></tr>
+            <tr><td>7</td><td>Detroit, MI, USA</td><td>52.94</td><td>25.6°F</td><td>11787777.0</td><td>107601</td><td>55</td><td>1800000</td></tr>
+            <tr><td>8</td><td>Las Vegas, NV, USA</td><td>50.26</td><td>48.9°F</td><td>19600869.0</td><td>65000</td><td>121</td><td>420000</td></tr>
+            <tr><td>9</td><td>New York City, NY, USA</td><td>46.77</td><td>33.7°F</td><td>12090274.0</td><td>82500</td><td>66</td><td>1400000</td></tr>
+            <tr><td>10</td><td>Boston, MA, USA</td><td>45.03</td><td>30.0°F</td><td>13559018.0</td><td>65000</td><td>15</td><td>2100000</td></tr>
+            <tr><td>11</td><td>Philadelphia, PA, USA</td><td>43.73</td><td>33.9°F</td><td>11150090.0</td><td>69176</td><td>123</td><td>1000000</td></tr>
+            <tr><td>12</td><td>Newark, NJ, USA</td><td>43.43</td><td>32.0°F</td><td>16438464.0</td><td>82500</td><td>66</td><td>467000</td></tr>
+            <tr><td>13</td><td>Tampa, FL, USA</td><td>42.79</td><td>61.5°F</td><td>8876713.0</td><td>69218</td><td>97</td><td>610000</td></tr>
+            <tr><td>14</td><td>Miami, FL, USA</td><td>42.34</td><td>68.8°F</td><td>16611116.0</td><td>65326</td><td>10</td><td>265000</td></tr>
+            <tr><td>15</td><td>Long Island, NY, USA</td><td>37.49</td><td>31.0°F</td><td>12090274.0</td><td>82500</td><td>66</td><td>320000</td></tr>
+            <tr><td>16</td><td>Pittsburgh, PA, USA</td><td>37.22</td><td>30.3°F</td><td>3573816.0</td><td>68400</td><td>59</td><td>1900000</td></tr>
+            <tr><td>17</td><td>Nashville, TN, USA</td><td>36.1</td><td>39.5°F</td><td>8781619.0</td><td>69143</td><td>99</td><td>416000</td></tr>
+            <tr><td>18</td><td>Minneapolis, MN, USA</td><td>35.66</td><td>16.5°F</td><td>13464945.0</td><td>66860</td><td>83</td><td>646000</td></tr>
+            <tr><td>19</td><td>Washington, DC, USA</td><td>33.81</td><td>37.3°F</td><td>7476634.0</td><td>80000</td><td>19</td><td>790000</td></tr>
+            <tr><td>20</td><td>Columbus, OH, USA</td><td>32.93</td><td>29.8°F</td><td>3257503.0</td><td>102780</td><td>66</td><td>328000</td></tr>
+            <tr><td>21</td><td>Vancouver, BC, Canada</td><td>31.64</td><td>39.0°F</td><td></td><td>54300</td><td>125</td><td>972000</td></tr>
+            <tr><td>22</td><td>Toronto, ON, Canada</td><td>31.38</td><td>28.0°F</td><td></td><td>54000</td><td>122</td><td>1300000</td></tr>
+            <tr><td>23</td><td>San Jose, CA, USA</td><td>28.11</td><td>51.0°F</td><td>4155232.0</td><td>68500</td><td>67</td><td>852000</td></tr>
+            <tr><td>24</td><td>Salt Lake City, UT, USA</td><td>25.88</td><td>32.3°F</td><td>10233134.0</td><td>62073</td><td>32</td><td>1600</td></tr>
+            <tr><td>25</td><td>St. Louis, MO, USA</td><td>25.68</td><td>32.6°F</td><td>5818049.0</td><td>44383</td><td>65</td><td>761000</td></tr>
+            <tr><td>26</td><td>Raleigh, NC, USA</td><td>25.36</td><td>43.4°F</td><td>5450834.0</td><td>63000</td><td>19</td><td>326000</td></tr>
+            <tr><td>27</td><td>Montreal, QC, Canada</td><td>24.02</td><td>21.0°F</td><td></td><td>56040</td><td>18</td><td>1500000</td></tr>
+            <tr><td>28</td><td>Buffalo, NY, USA</td><td>20.62</td><td>25.6°F</td><td>1869359.0</td><td>71608</td><td>16</td><td>493000</td></tr>
+            <tr><td>29</td><td>Edmonton, AB, Canada</td><td>17.7</td><td>12.3°F</td><td></td><td>56302</td><td>49</td><td>667000</td></tr>
+            <tr><td>30</td><td>Calgary, AB, Canada</td><td>12.7</td><td>12.3°F</td><td></td><td>35650</td><td>78</td><td>389000</td></tr>
+            <tr><td>31</td><td>Ottawa, ON, Canada</td><td>7.84</td><td>14.0°F</td><td></td><td>24000</td><td>52</td><td>323000</td></tr>
+            <tr><td>32</td><td>Winnipeg, MB, Canada</td><td>5.96</td><td>5.0°F</td><td></td><td>33000</td><td>17</td><td>412000</td></tr>
+            <tr class="dw-empty" style="display:none;"><td colspan="8">No matches found.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="dw-page-status " style="padding:8px 2px 0; color:#6b7280; font:12px/1.2 system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;">
+      <span id="dw-page-status-text"></span>
+    </div>
+  </div>
+
+  <!-- Footer (optional) -->
+  <div class="vi-footer " role="contentinfo">
+    <div class="footer-inner">
+      <img src="https://i.postimg.cc/x1nG117r/AN-final2-logo.png" alt="Action Network logo" width="140" height="auto" loading="lazy" decoding="async" />
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    const root = document.getElementById('bt-block');
+    if (!root || root.dataset.dwInit === '1') return;
+    root.dataset.dwInit='1';
+
+    const table = root.querySelector('table.dw-table');
+    const tb = table ? table.tBodies[0] : null;
+    const scroller = root.querySelector('.dw-scroll');
+    const controls = root.querySelector('.dw-controls');
+    if(!table || !tb || !scroller || !controls) return;
+
+    const controlsHidden = controls.classList.contains('vi-hide');
+
+    const searchFieldWrap = controls.querySelector('.dw-field');
+    const searchInput = controls.querySelector('.dw-input');
+    const clearBtn = controls.querySelector('.dw-clear');
+
+    const pagerWrap = controls.querySelector('.right');
+    const sizeSel = controls.querySelector('#bt-size');
+    const prevBtn = controls.querySelector('[data-page="prev"]');
+    const nextBtn = controls.querySelector('[data-page="next"]');
+
+    const emptyRow = tb.querySelector('.dw-empty');
+    const pageStatus = document.getElementById('dw-page-status-text');
+
+    const hasSearch = !controlsHidden
+      && !!searchFieldWrap && !searchFieldWrap.classList.contains('vi-hide')
+      && !!searchInput && !!clearBtn;
+
+    const hasPager = !controlsHidden
+      && !!pagerWrap && !pagerWrap.classList.contains('vi-hide')
+      && !!sizeSel && !!prevBtn && !!nextBtn;
+
+    if (table.tHead && table.tHead.rows[0].cells.length <= 4) {
+      scroller.classList.add('no-scroll');
+    }
+
+    Array.from(tb.rows).forEach((r,i)=>{ if(!r.classList.contains('dw-empty')) r.dataset.idx=i; });
+
+    // ✅ If pager is OFF, show ALL rows by default
+    let pageSize = hasPager ? (parseInt(sizeSel.value,10) || 10) : 0; // 0 = All
+    let page = 1;
+    let filter = '';
+
+    const onScrollShadow = ()=> scroller.classList.toggle('scrolled', scroller.scrollTop > 0);
+    scroller.addEventListener('scroll', onScrollShadow); onScrollShadow();
+
+    // Sorting always on
+    const heads = Array.from(table.tHead.rows[0].cells);
+    heads.forEach((th,i)=>{
+      th.classList.add('sortable'); th.setAttribute('aria-sort','none'); th.dataset.sort='none'; th.tabIndex=0;
+      const type = th.dataset.type || 'text';
+      const go = ()=> sortBy(i,type,th);
+      th.addEventListener('click',go);
+      th.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } });
+    });
+
+    function textOf(tr,i){ return (tr.children[i].innerText||'').trim(); }
+
+    function sortBy(colIdx, type, th){
+      const rows = Array.from(tb.rows).filter(r=>!r.classList.contains('dw-empty'));
+      const current = th.dataset.sort || 'none';
+      const next = current==='none' ? 'asc' : current==='asc' ? 'desc' : 'none';
+
+      heads.forEach(h=>{
+        h.dataset.sort='none';
+        h.setAttribute('aria-sort','none');
+        h.classList.remove('is-sorted');
+      });
+
+      if(next === 'none'){
+        rows.sort((a,b)=>(+a.dataset.idx)-(+b.dataset.idx));
+        rows.forEach(r=>tb.insertBefore(r, emptyRow));
+        renderPage();
+        return;
+      }
+
+      th.dataset.sort = next;
+      th.setAttribute('aria-sort', next==='asc'?'ascending':'descending');
+
+      const mul = next==='asc'?1:-1;
+      rows.sort((a,b)=>{
+        let v1=textOf(a,colIdx), v2=textOf(b,colIdx);
+        if((type||'text')==='num'){
+          v1=parseFloat(v1.replace(/[^0-9.\-]/g,'')); if(isNaN(v1)) v1=-Infinity;
+          v2=parseFloat(v2.replace(/[^0-9.\-]/g,'')); if(isNaN(v2)) v2=-Infinity;
+        }else{
+          v1=(v1+'').toLowerCase();
+          v2=(v2+'').toLowerCase();
+        }
+        if(v1>v2) return 1*mul;
+        if(v1<v2) return -1*mul;
+        return 0;
+      });
+      rows.forEach(r=>tb.insertBefore(r, emptyRow));
+      th.classList.add('is-sorted');
+      renderPage();
+    }
+
+    function matchesFilter(tr){
+      if(tr.classList.contains('dw-empty')) return false;
+      if(!filter) return true;
+      return tr.innerText.toLowerCase().includes(filter);
+    }
+
+    function setPageStatus(totalVisible, pages){
+      if(!pageStatus) return;
+      if(totalVisible === 0){ pageStatus.textContent = ""; return; }
+      if(!hasPager || pageSize === 0){ pageStatus.textContent = ""; return; }
+      pageStatus.textContent = "Page " + page + " of " + pages;
+    }
+
+    function renderPage(){
+      const ordered = Array.from(tb.rows).filter(r=>!r.classList.contains('dw-empty'));
+      const visible = ordered.filter(matchesFilter);
+      const total = visible.length;
+
+      ordered.forEach(r=>{ r.style.display='none'; });
+      let shown = [];
+
+      if(total===0){
+        if(emptyRow){
+          emptyRow.style.display='table-row';
+          emptyRow.firstElementChild.colSpan = heads.length;
+        }
+        if(hasPager){ prevBtn.disabled = nextBtn.disabled = true; }
+        setPageStatus(0, 0);
+      }else{
+        if(emptyRow) emptyRow.style.display='none';
+
+        if(!hasPager || pageSize===0){
+          shown = visible;
+          if(hasPager){ prevBtn.disabled = nextBtn.disabled = true; }
+          setPageStatus(total, 1);
+        }else{
+          const pages = Math.max(1, Math.ceil(total / pageSize));
+          page = Math.min(Math.max(1, page), pages);
+          const start = (page-1)*pageSize;
+          const end = start + pageSize;
+          shown = visible.slice(start,end);
+          prevBtn.disabled = page<=1;
+          nextBtn.disabled = page>=pages;
+          setPageStatus(total, pages);
+        }
+      }
+
+      shown.forEach(r=>{ r.style.display='table-row'; });
+    }
+
+    // Search wiring (only if visible)
+    if(hasSearch){
+      const syncClearBtn = ()=> searchFieldWrap.classList.toggle('has-value', !!searchInput.value);
+      let t=null;
+      searchInput.addEventListener('input', e=>{
+        syncClearBtn();
+        clearTimeout(t);
+        t=setTimeout(()=>{
+          filter=(e.target.value||'').toLowerCase().trim();
+          page=1;
+          renderPage();
+        },120);
+      });
+      clearBtn.addEventListener('click', ()=>{
+        searchInput.value='';
+        syncClearBtn();
+        filter='';
+        page=1;
+        renderPage();
+        searchInput.focus();
+      });
+      syncClearBtn();
+    }
+
+    // Pager wiring (only if visible)
+    if(hasPager){
+      sizeSel.addEventListener('change', e=>{
+        pageSize = parseInt(e.target.value,10) || 0;
+        page=1;
+        renderPage();
+      });
+      prevBtn.addEventListener('click', ()=>{ page--; renderPage(); });
+      nextBtn.addEventListener('click', ()=>{ page++; renderPage(); });
+    }
+
+    renderPage();
+  })();
+  </script>
+
+</section>
+</body>
+</html>
